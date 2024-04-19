@@ -6,6 +6,8 @@ interface QuizData {
   question: string;
   answers: string[];
   right_answer: number;
+  assistant_id: string;
+  thread_id: string;
 }
 
 const StaffQuestionGeneration: React.FC = () => {
@@ -16,6 +18,8 @@ const navigate = useNavigate();
   const [questionGenerationLoading, setQuestionGenerationLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [fileId, setFileId] = useState<string>("");
+  const [assistantId, setAssistantId] = useState<string>("");
+  const [threadId, setThreadId] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
 
 
@@ -25,6 +29,10 @@ const navigate = useNavigate();
 
     const formData = new FormData();
     formData.append('file_id', fileId);
+    if (threadId) formData.append('thread_id', threadId);
+    if (assistantId) formData.append('assistant_id', assistantId);
+    console.log(threadId, "threadId")
+    console.log(assistantId, "assistantId")
 
     try {
       const response = await fetch('http://127.0.0.1:8000/generate_question', {
@@ -34,6 +42,8 @@ const navigate = useNavigate();
 
       const data: QuizData = await response.json();
       setQuizData(data);
+      setAssistantId(data.assistant_id)
+      setThreadId(data.thread_id)
       console.log('Question fetched successfully:', data);
     } catch (error) {
       console.error('Failed to fetch question:', error);
@@ -85,7 +95,8 @@ const navigate = useNavigate();
       <br />
       <br />
       <div className="questionUploadContainer">
-        <button onClick={uploadFile} className="quizButton">Upload File</button>
+        {fileUploaded ? <button onClick={uploadFile} className="uploadButton">Change File</button> : 
+        <button onClick={uploadFile} className="quizButton">Upload File</button>}
 
       </div>
 
@@ -95,6 +106,9 @@ const navigate = useNavigate();
       {fileUploaded &&
               <div className="title-text">
         <button onClick={fetchQuestion} className="quizButton">Generate a Question</button>
+
+        { questionGenerationLoading && <p>Loading...</p>}
+      {error && <p className="error">{error}</p>}
 
         <h3 className="title"> Question: </h3>
 
@@ -112,17 +126,20 @@ const navigate = useNavigate();
       <li className="optionItem">No options available</li>
     )}
   </ul>
-  <div className={`correctAnswer ${quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? 'visible' : 'hidden'}`}>
+  <div>
+    <h3 className={`correctAnswerText ${quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? 'visible' : 'hidden'}`}>
     Correct Answer
-    <br/>
+    </h3>
+    
+    <span className="correctAnswer">
     {quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? quizData.answers[quizData.right_answer] : ''}
+    </span>
   </div>
 
         </div>
         }
 
-{ questionGenerationLoading && <p>Loading...</p>}
-      {error && <p className="error">{error}</p>}
+
 
 
 <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>

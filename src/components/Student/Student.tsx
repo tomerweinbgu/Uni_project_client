@@ -1,18 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Student.css";
 import { useNavigate } from "react-router-dom";
 import hljs from "highlight.js";
 import "highlight.js/styles/base16/atelier-dune-light.min.css";
 
+// interface AnswerObject {
+//     contentType: string;
+//     answer: string;
+//   }
+
+interface AnswerPartObject {
+    type: string;
+    content: string;
+  }
+
 interface AnswerObject {
-    contentType: string;
-    answer: string;
+    content: string;
+    thread_id: string;
+    assistant_id: string;
   }
 
 const StaffQuestionGeneration: React.FC = () => {
 const navigate = useNavigate();
-  const [answersData, setAnswersData] = useState<AnswerObject[] | null>(null);
-  const [answer, setAnswer] = useState<string>("");
+  const [answer, setAnswer] = useState<AnswerObject | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [questionLoading, setQuestionLoading] = useState<boolean>(false);
@@ -20,7 +30,44 @@ const navigate = useNavigate();
   const [fileId, setFileId] = useState<string>("");
   const [textareaValue, setTextareaValue] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
+  const [segments, setSegments] = useState<AnswerPartObject[]>([]);
 
+
+  useEffect(() => {
+    if (!answer) {
+      return;
+    }
+    const parts = answer.content.split(/(`.*?`)/g); // Split the answer by code marked with backticks
+    const processedParts = parts.map(part => {
+      if (part.startsWith('```typescript') && part.endsWith('```')) {
+        return {
+          type: 'code',
+          content: hljs.highlightAuto(part.slice(13, -3)).value
+        } as AnswerPartObject;
+      }
+      else if (part.startsWith('`typescript') && part.endsWith('`')) {
+        return {
+          type: 'code',
+          content: hljs.highlightAuto(part.slice(11, -1)).value
+        } as AnswerPartObject;
+      }
+
+      else if (part.startsWith('`') && part.endsWith('`')) {
+        return {
+          type: 'code',
+          content: hljs.highlightAuto(part.slice(1, -1)).value
+        } as AnswerPartObject;
+      } else {
+        // It's regular text
+        return {
+          type: 'text',
+          content: part
+        } as AnswerPartObject;
+      }
+    });
+    setSegments(processedParts);
+    console.log(processedParts)
+  }, [answer]);
 
 
   const fetchQuestion = async () => {
@@ -37,21 +84,17 @@ const navigate = useNavigate();
         body: formData,
       });;
 
-      const data: AnswerObject[] = await response.json();
+      const data: AnswerObject = await response.json();
       console.log(data);
       console.log("hey");
-    //   console.log(data[0].answer);
-      setAnswersData(data);
-      if (data.length > 0){
-        const formattedText = data[0].answer.split("\n").map(line => `({ contentType: 'text', answer: '${line}' })`).join(", ");
-
-        setAnswer(formattedText);
-      }
+      setAnswer(data);
       console.log('Question fetched successfully:', data);
+      
+     
     } catch (error) {
       console.error('Failed to fetch question:', error);
       setError('Failed to fetch question');
-      setAnswersData(null);
+      setAnswer(null);
     } finally {
         setQuestionLoading(false);
     }
@@ -65,7 +108,7 @@ const navigate = useNavigate();
     navigate("/"); 
   };
 
-  const highlightedHtml = hljs.highlightAuto(answersData && answersData.length > 0 ? answersData[0].answer: "").value;
+  const highlightedHtml = hljs.highlightAuto(answer?.content? answer.content : "").value;
   console.log("check");
   console.log(highlightedHtml);
 
@@ -102,7 +145,10 @@ const navigate = useNavigate();
       <br />
       <br />
       <div className="questionUploadContainer">
-        <button onClick={uploadFile} className="quizButton">Upload File</button>
+        {fileUploaded ? <button onClick={uploadFile} className="uploadButton">Change File</button> : 
+        <button onClick={uploadFile} className="quizButton">Upload File</button>}
+
+      </div>
         
         {fileUploaded &&
         <div className="title-text">
@@ -112,34 +158,27 @@ const navigate = useNavigate();
     value={textareaValue}
     onChange={(e) => setTextareaValue(e.target.value)}
   />
-  
+
+<button onClick={fetchQuestion} className="quizButton">Ask a Question</button>    
+</div>
+        }
 
   {uploadLoading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
 
 <div>
-      <button onClick={fetchQuestion} className="quizButton">Ask a Question</button>
-      </div>
-  </div>
-}
 
 
-
-
-    {highlightedHtml &&
-    <div className="title-text">
-    <h3 className="title"> Answer: </h3>
-    <pre className="answerArea">
-        <code dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
-    </pre>
+<div className="whiteSpaceContainer">
+      {segments.map((segment, index) =>
+        segment.type === 'code' ? (
+          <code key={index} className="inlineCode" dangerouslySetInnerHTML={{ __html: segment.content }} />
+        ) : (
+          <span key={index} className="inlineText">{segment.content}</span>
+        )
+      )}
     </div>
-}
 
-{/* <textarea 
-    className="answerArea" 
-    value={answersData && answersData.length > 0 ? answersData[0].answer : ''}  
-    readOnly
-  /> */}
 
 </div>
 
