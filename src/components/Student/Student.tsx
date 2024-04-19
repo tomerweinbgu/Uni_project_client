@@ -31,6 +31,8 @@ const navigate = useNavigate();
   const [textareaValue, setTextareaValue] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
   const [segments, setSegments] = useState<AnswerPartObject[]>([]);
+  const [assistantId, setAssistantId] = useState<string>("");
+  const [threadId, setThreadId] = useState<string>("");
 
 
   useEffect(() => {
@@ -65,6 +67,7 @@ const navigate = useNavigate();
         } as AnswerPartObject;
       }
     });
+    
     setSegments(processedParts);
     console.log(processedParts)
   }, [answer]);
@@ -77,6 +80,8 @@ const navigate = useNavigate();
     const formData = new FormData();
     formData.append('file_id', fileId);
     formData.append('question', textareaValue);
+    if (threadId) formData.append('thread_id', threadId);
+    if (assistantId) formData.append('assistant_id', assistantId);
 
     try {
       const response = await fetch('http://127.0.0.1:8000/ask_question', {
@@ -85,6 +90,8 @@ const navigate = useNavigate();
       });;
 
       const data: AnswerObject = await response.json();
+      setAssistantId(data.assistant_id)
+      setThreadId(data.thread_id)
       console.log(data);
       console.log("hey");
       setAnswer(data);
@@ -163,7 +170,7 @@ const navigate = useNavigate();
 </div>
         }
 
-  {uploadLoading && <p>Loading...</p>}
+  {questionLoading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
 
 <div>
