@@ -1,13 +1,6 @@
-.quizContainer {
-  max-width: 600px;
-  margin: 80px auto;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  background-color: #ffffff;
-}
 
-.quizButton, .uploadButton {
+
+.quizButton, .uploadButton, .modalButton {
   display: block;
   width: 100%;
   padding: 10px 20px;
@@ -34,6 +27,14 @@
 
 .uploadButton:hover {
   background-color: #259407;
+}
+
+.modalButton {
+  background-color: #007BFF;
+}
+
+.modalButton:hover {
+  background-color: #0056b3;
 }
 
 .questionArea {
@@ -74,11 +75,14 @@
 }
 
 .fileInput {
-  margin-right: 10px;
+  display: block;  /* Makes it a block element which respects margin: auto */
+  margin: 0 auto;  /* Sets top and bottom margins to 0 and left and right margins to auto */
   padding: 8px;
   border: 2px solid #ccc;
   border-radius: 4px;
+  width: 70%; /* Adjust the width as needed */
 }
+
 
 .correctAnswer {
   color: #28527a;
@@ -130,4 +134,68 @@
 
 .correctAnswerText.visible {
   display: block;
+}
+
+.fullContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-right: 280px; /* Moves the container to the left by 20px */
+  gap: 120px;
+  min-height: 100vh;
+}
+
+.sideBar {
+  width: 200px;
+  max-width: 200px;
+  height: 500px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.quizContainer {
+  width: 600px;
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.inputContainer{
+  display: flex;
+  flex-direction: row;
+}
+
+.saveButton {
+  display: block;
+  width: 10%;
+  font-size: 16px;
+  color: #007BFF; /* Blue text to contrast with white background */
+  background-color: #fff; /* White background */
+  border: 2px solid #007BFF; /* Blue border to match the text */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+}
+
+.saveButton:hover {
+  background-color: #007BFF; /* Blue background on hover */
+  color: #fff; /* White text on hover */
+  border-color: #0056b3; /* Darker blue border on hover */
+  transition: background-color 0.8s, color 0.8s, border-color 0.8s;
+}
+
+.saveButton:active {
+  background-color: #ccc; /* Gray background when clicked */
+  color: #333; /* Dark text when clicked */
+  border-color: #aaa; /* Dark gray border when clicked */
+  transition: background-color 0.8s, color 0.8s, border-color 0.8s;
+
 }

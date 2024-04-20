@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./StaffQuestionGeneration.css";
 import { useNavigate } from "react-router-dom";
+import { marked } from 'marked'; // If 'marked' is a named export
+
+import Modal from "../Modal/Modal"; // Import Modal component
 
 interface QuizData {
   question: string;
@@ -8,6 +11,7 @@ interface QuizData {
   right_answer: number;
   assistant_id: string;
   thread_id: string;
+  file_name?: string;
 }
 
 const StaffQuestionGeneration: React.FC = () => {
@@ -21,6 +25,73 @@ const navigate = useNavigate();
   const [assistantId, setAssistantId] = useState<string>("");
   const [threadId, setThreadId] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
+  const [markdown, setMarkdown] = useState<string>("");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const [selectedFile, setSelectedFile] = useState<string>("");
+  const [filesName, setFilesName] = useState<string[]>([]);
+
+
+  // useEffect(() => {
+  //   const fetchFiles = async () => {
+  //     try {
+  //       const response = await fetch('http://127.0.0.1:8000/load_files');
+  //       const data = await response.json();
+  //       console.log(data)
+  //       // setFiles(data);
+  //     } catch (error) {
+  //       console.error('Failed to fetch files:', error);
+  //     }
+  //   };
+
+  //   fetchFiles();
+  // }, []);
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/load_quiz');
+        const fileNames = await response.json();  // Expecting an array of file names
+        for (const filename of fileNames) {
+          console.log(filename);
+      }
+        console.log(filesName)
+        setFiles(fileNames);  // Assuming setFiles will store these names in state
+      } catch (error) {
+        console.error('Failed to fetch files:', error);
+      }
+    };
+  
+    fetchFiles();
+  }, []);
+  
+
+  const handleFileSelect = (file: any) => {
+    console.log("hey")
+  };
+
+  const handleSaveQuestion = async () => {
+    if (quizData) {
+      if (file) quizData.file_name = file.name 
+      console.log(file?.name)
+      console.log("hey", quizData.file_name)
+      try {
+        const response = await fetch('http://127.0.0.1:8000/add_question_to_quiz', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(quizData)
+        });
+
+      console.log('Question fetched successfully:');
+    } catch (error) {
+      console.error('Failed to fetch question:', error);
+      setError('Failed to fetch question');
+      setQuizData(null);
+    }
+  }
+};
 
 
   const fetchQuestion = async () => {
@@ -54,12 +125,50 @@ const navigate = useNavigate();
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSaveFile = async() => {
+    if (!file) {
+      alert('Please select a file first!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    console.log("hey")
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/save_file', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+
+      console.log('File uploaded successfully:', result);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    } finally {
+        setUploadLoading(false);
+    }
+
+  }
+
+  const handleFileChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
     setFile(event.target.files ? event.target.files[0] : null);
+    if (file !== null){ 
+    const text = await file.text();
+
+    setMarkdown(text);
+    console.log("checkcheckcheck")
+    console.log(text)
+    setFileUploaded(true);
+    }
   };
 
   const goBackToLobby = () => {
     navigate("/"); 
+  };
+
+  const renderMarkdown = (markdownText: string) => {
+    return marked.parse(markdownText);
   };
 
   const uploadFile = async () => {
@@ -67,6 +176,13 @@ const navigate = useNavigate();
       alert('Please select a file first!');
       return;
     }
+    
+    const text = await file.text();
+
+    setMarkdown(text);
+    console.log("checkcheckcheck")
+    console.log(text)
+
     setUploadLoading(true);
     setError("");
     const formData = new FormData();
@@ -89,19 +205,53 @@ const navigate = useNavigate();
     }
   };
 
+  const toggleModal = () => setShowModal(!showModal);
+
+
   return (
+    <div className="fullContainer">
+      <div className="sideBar">
+        Sidebar
+
+        {filesName.map((fileName, index) => (
+    // <button key={index} onClick={() => handleFileSelect(fileName)}>
+    <button key={index} onClick={() => handleFileSelect(fileName)}>
+        {fileName}
+    </button>
+      ))}
+
+        {/* {files.map(file => (
+          <button key={file.name} onClick={() => handleFileSelect(file)}>
+            {file.name}
+          </button>
+        ))} */}
+        <button onClick={toggleModal} className="modalButton">{file?.name}</button>
+
+      </div>
     <div className="quizContainer">
-      <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
-      <br />
-      <br />
+      <div className="inputContainer">
+        <button className="saveButton" onClick={handleSaveFile}> Save </button>
+        <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
+      </div>
       <div className="questionUploadContainer">
         {fileUploaded ? <button onClick={uploadFile} className="uploadButton">Change File</button> : 
         <button onClick={uploadFile} className="quizButton">Upload File</button>}
 
+
+      
       </div>
 
       {uploadLoading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
+
+
+
+      <Modal isOpen={showModal} onClose={toggleModal}>
+      <div dangerouslySetInnerHTML={{ __html: renderMarkdown(markdown) as unknown as string }} />
+       </Modal>
+      {/* <Modal isOpen={showModal} onClose={toggleModal}>
+      <div dangerouslySetInnerHTML={{ __html: renderMarkdown(selectedFile.content) }} />
+       </Modal> */}
 
       {fileUploaded &&
               <div className="title-text">
@@ -139,12 +289,16 @@ const navigate = useNavigate();
         </div>
         }
 
+  <button className="saveButton" onClick={handleSaveQuestion}> Save </button>
+
 
 
 
 <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
     </div>
+    </div>
   );
 };
+
 
 export default StaffQuestionGeneration;

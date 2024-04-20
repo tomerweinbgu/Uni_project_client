@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import StaffQuestionGeneration from "./components/StaffQuestionGeneration/StaffQuestionGeneration";
 import Lobby from "./components/Lobby/Lobby";
 import Student from "./components/Student/Student";
+import QuizArchive from "./components/QuizArchive/QuizArchive";
+
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
           <Route path="/" element={<Lobby />} />
           <Route path="/staff" element={<StaffQuestionGeneration />} />
           <Route path="/student" element={<Student />} />
+          <Route path="/quiz/:quizId/:questionNumber" element={<QuizArchive />} />
         </Routes>
       </div>
     </Router>

@@ -1,0 +1,36 @@
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other content */
+  overflow: hidden; /* Ensures that any overflowing content in modal is hidden */
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 750px;
+  width: 90%; /* Adjusted width to be percentage for responsive sizing */
+  border: 2px solid black; /* Added 'border' property with style */
+  text-align: left;
+  max-height: 80%; /* Maximum height to allow for scrolling */
+  overflow-y: auto; /* Enables vertical scrolling if content is taller than max-height */
+  direction: rtl;
+}
+
+.modal-content * {
+  direction: ltr;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
