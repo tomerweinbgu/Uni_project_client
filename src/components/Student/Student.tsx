@@ -152,8 +152,8 @@ const navigate = useNavigate();
       <br />
       <br />
       <div className="questionUploadContainer">
-        {fileUploaded ? <button onClick={uploadFile} className="uploadButton">Change File</button> : 
-        <button onClick={uploadFile} className="quizButton">Upload File</button>}
+        {fileUploaded ? <button onClick={uploadFile} className="changeButton">Change File</button> : 
+        <button onClick={uploadFile} className="uploadButton">Upload File</button>}
 
       </div>
         
@@ -166,7 +166,7 @@ const navigate = useNavigate();
     onChange={(e) => setTextareaValue(e.target.value)}
   />
 
-<button onClick={fetchQuestion} className="quizButton">Ask a Question</button>    
+<button onClick={fetchQuestion} className="uploadButton">Ask a Question</button>    
 </div>
         }
 

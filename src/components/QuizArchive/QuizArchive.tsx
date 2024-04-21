@@ -8,6 +8,8 @@ const QuizPage: React.FC = () => {
     right_answer: number;
   }
 
+  const { fileName } = useParams<{ fileName: string }>();
+
   const { quizId, questionNumber } = useParams<{ quizId: string, questionNumber: string }>();
   const [quizData, setQuizData] = useState<QuizData | null>(null);
 
@@ -23,8 +25,15 @@ const QuizPage: React.FC = () => {
     fetchQuestion();
   }, [quizId, questionNumber]);
 
+  
+  useEffect(() => {
+    console.log(fileName)
+
+  }, []);
+
   return (
     <div>
+      
       <textarea 
         className="questionArea" 
         value={quizData ? quizData.question : ''} 
@@ -35,6 +44,7 @@ const QuizPage: React.FC = () => {
           <li key={index} className="optionItem">{answer}</li>
         ))}
       </ul>
+      
       <div>
         <h3 className={`correctAnswerText ${quizData && quizData.right_answer !== undefined ? 'visible' : 'hidden'}`}>
           Correct Answer

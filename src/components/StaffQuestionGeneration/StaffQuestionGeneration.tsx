@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./StaffQuestionGeneration.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { marked } from 'marked'; // If 'marked' is a named export
 
 import Modal from "../Modal/Modal"; // Import Modal component
@@ -29,34 +29,16 @@ const navigate = useNavigate();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
   const [selectedFile, setSelectedFile] = useState<string>("");
-  const [filesName, setFilesName] = useState<string[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]);
 
-
-  // useEffect(() => {
-  //   const fetchFiles = async () => {
-  //     try {
-  //       const response = await fetch('http://127.0.0.1:8000/load_files');
-  //       const data = await response.json();
-  //       console.log(data)
-  //       // setFiles(data);
-  //     } catch (error) {
-  //       console.error('Failed to fetch files:', error);
-  //     }
-  //   };
-
-  //   fetchFiles();
-  // }, []);
 
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/load_quiz');
-        const fileNames = await response.json();  // Expecting an array of file names
-        for (const filename of fileNames) {
-          console.log(filename);
-      }
-        console.log(filesName)
-        setFiles(fileNames);  // Assuming setFiles will store these names in state
+        const response = await fetch('http://127.0.0.1:8000/load_quiz_names');
+        const fetchedFileNames = await response.json();
+        setFileNames(fetchedFileNames);
+
       } catch (error) {
         console.error('Failed to fetch files:', error);
       }
@@ -66,15 +48,11 @@ const navigate = useNavigate();
   }, []);
   
 
-  const handleFileSelect = (file: any) => {
-    console.log("hey")
-  };
-
   const handleSaveQuestion = async () => {
     if (quizData) {
       if (file) quizData.file_name = file.name 
-      console.log(file?.name)
-      console.log("hey", quizData.file_name)
+      // console.log(file?.name)
+      // console.log("hey", quizData.file_name)
       try {
         const response = await fetch('http://127.0.0.1:8000/add_question_to_quiz', {
           method: 'POST',
@@ -153,7 +131,9 @@ const navigate = useNavigate();
 
   const handleFileChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
     setFile(event.target.files ? event.target.files[0] : null);
+    
     if (file !== null){ 
+      console.log(file.name, "file_name")
     const text = await file.text();
 
     setMarkdown(text);
@@ -180,13 +160,11 @@ const navigate = useNavigate();
     const text = await file.text();
 
     setMarkdown(text);
-    console.log("checkcheckcheck")
-    console.log(text)
 
     setUploadLoading(true);
     setError("");
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', file, file.name);
 
     try {
       const response = await fetch('http://127.0.0.1:8000/upload_file', {
@@ -213,12 +191,18 @@ const navigate = useNavigate();
       <div className="sideBar">
         Sidebar
 
-        {filesName.map((fileName, index) => (
-    // <button key={index} onClick={() => handleFileSelect(fileName)}>
-    <button key={index} onClick={() => handleFileSelect(fileName)}>
-        {fileName}
-    </button>
-      ))}
+        {fileNames.map(fileName => (
+                <Link
+                    key={fileName}  // Ensure key is unique and stable
+                    to={`/quiz/${fileName}/1`}  // Construct the URL dynamically
+                    className="quiz-link"  // Styling class for the link
+                >
+                    {fileName}
+                </Link>
+            ))}
+
+
+      
 
         {/* {files.map(file => (
           <button key={file.name} onClick={() => handleFileSelect(file)}>
@@ -234,8 +218,8 @@ const navigate = useNavigate();
         <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
       </div>
       <div className="questionUploadContainer">
-        {fileUploaded ? <button onClick={uploadFile} className="uploadButton">Change File</button> : 
-        <button onClick={uploadFile} className="quizButton">Upload File</button>}
+        {fileUploaded ? <button onClick={uploadFile} className="changeButton">Change File</button> : 
+        <button onClick={uploadFile} className="uploadButton">Upload File</button>}
 
 
       
@@ -289,7 +273,7 @@ const navigate = useNavigate();
         </div>
         }
 
-  <button className="saveButton" onClick={handleSaveQuestion}> Save </button>
+  {/* <button className="saveButton" onClick={handleSaveQuestion}> Save </button> */}
 
 
 

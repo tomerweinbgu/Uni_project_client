@@ -1,6 +1,6 @@
 
 
-.quizButton, .uploadButton, .modalButton {
+.uploadButton, .changeButton, .modalButton {
   display: block;
   width: 100%;
   padding: 10px 20px;
@@ -13,19 +13,19 @@
   margin-top: 20px;
 }
 
-.quizButton {
+.uploadButton {
   background-color: #007BFF;
 }
 
-.quizButton:hover {
+.uploadButton:hover {
   background-color: #0056b3;
 }
 
-.uploadButton {
+.changeButton {
   background-color: #3ecd16;
 }
 
-.uploadButton:hover {
+.changeButton:hover {
   background-color: #259407;
 }
 
@@ -154,6 +154,8 @@
   border-right: 1px solid #dee2e6;
   padding: 20px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .quizContainer {
@@ -199,3 +201,25 @@
   transition: background-color 0.8s, color 0.8s, border-color 0.8s;
 
 }
+
+.quizButton {
+  padding: 6px 10px;  /* Small padding to keep the button compact */
+  font-size: 12px;    /* Smaller font size for text */
+  color: #ffffff;     /* White text color */
+  background-color: #eb0000d5; /* Bootstrap primary blue for background */
+  border: none;       /* No border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer;    /* Cursor indicates clickable */
+  margin: 2px;        /* Small margin to avoid buttons sticking to each other */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.quizButton:hover {
+  background-color: #b60303; /* Darker shade of blue on hover */
+}
+
+.quizButton:active {
+  background-color: #790000; /* Even darker shade when active/clicked */
+  transform: translateY(1px); /* Slightly shift down the button when clicked */
+}
+
