@@ -239,7 +239,7 @@ const navigate = useNavigate();
 
       {fileUploaded &&
               <div className="title-text">
-        <button onClick={fetchQuestion} className="quizButton">Generate a Question</button>
+        <button onClick={fetchQuestion} className="uploadButton">Generate a Question</button>
 
         { questionGenerationLoading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
@@ -273,7 +273,7 @@ const navigate = useNavigate();
         </div>
         }
 
-  {/* <button className="saveButton" onClick={handleSaveQuestion}> Save </button> */}
+  <button className="saveButton" onClick={handleSaveQuestion}> Save </button>
 
 
 
