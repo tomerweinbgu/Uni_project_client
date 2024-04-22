@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Student.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+
 import hljs from "highlight.js";
 import "highlight.js/styles/base16/atelier-dune-light.min.css";
 
@@ -33,7 +34,24 @@ const navigate = useNavigate();
   const [segments, setSegments] = useState<AnswerPartObject[]>([]);
   const [assistantId, setAssistantId] = useState<string>("");
   const [threadId, setThreadId] = useState<string>("");
+  const [fileNames, setFileNames] = useState<string[]>([]);
 
+
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/load_quiz_names');
+        const fetchedFileNames = await response.json();
+        setFileNames(fetchedFileNames);
+
+      } catch (error) {
+        console.error('Failed to fetch files:', error);
+      }
+    };
+  
+    fetchFiles();
+  }, []);
 
   useEffect(() => {
     if (!answer) {
@@ -147,6 +165,23 @@ const navigate = useNavigate();
   };
 
   return (
+    <div className="fullContainer">
+    <div className="sideBar">
+      Sidebar
+
+      {fileNames.map(fileName => (
+              <Link
+                  key={fileName}
+                  to={`/quiz/${fileName}/1`} 
+                  className="quiz-link" 
+              >
+                  {fileName}
+              </Link>
+          ))}
+
+
+  
+    </div>
     <div className="quizContainer">
       <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
       <br />
@@ -191,6 +226,8 @@ const navigate = useNavigate();
 
 <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
     </div>
+    </div>
+
   );
 };
 

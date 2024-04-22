@@ -203,23 +203,52 @@
 }
 
 .quizButton {
-  padding: 6px 10px;  /* Small padding to keep the button compact */
-  font-size: 12px;    /* Smaller font size for text */
-  color: #ffffff;     /* White text color */
-  background-color: #eb0000d5; /* Bootstrap primary blue for background */
-  border: none;       /* No border */
-  border-radius: 4px; /* Rounded corners */
-  cursor: pointer;    /* Cursor indicates clickable */
-  margin: 2px;        /* Small margin to avoid buttons sticking to each other */
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  padding: 6px 10px;
+  font-size: 12px;
+  color: #ffffff;
+  background-color: #eb0000d5;
+  border: none;     
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 2px; 
+  transition: background-color 0.3s ease;
 }
 
 .quizButton:hover {
-  background-color: #b60303; /* Darker shade of blue on hover */
+  background-color: #b60303;
 }
 
 .quizButton:active {
-  background-color: #790000; /* Even darker shade when active/clicked */
-  transform: translateY(1px); /* Slightly shift down the button when clicked */
+  background-color: #790000;
+  transform: translateY(1px);
+}
+
+
+.quiz-link {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: #dd0000;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.quiz-link:hover, .quiz-link:focus {
+  background-color: #b10101e1; /* Darker blue on hover/focus */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for 3D effect */
+  transform: translateY(-2px); /* Slight raise effect on hover */
+}
+
+.quiz-link:active {
+  background-color: #500000; /* Even darker blue when active */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Inner shadow for pressed effect */
+  transform: translateY(1px); /* Reset position to give a pressed effect */
 }
 

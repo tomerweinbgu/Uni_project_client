@@ -14,6 +14,9 @@ interface QuizData {
   file_name?: string;
 }
 
+
+
+
 const StaffQuestionGeneration: React.FC = () => {
 const navigate = useNavigate();
   const [quizData, setQuizData] = useState<QuizData | null>(null);
@@ -30,7 +33,51 @@ const navigate = useNavigate();
   const [files, setFiles] = useState<File[]>([]);
   const [selectedFile, setSelectedFile] = useState<string>("");
   const [fileNames, setFileNames] = useState<string[]>([]);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editableAnswer, setEditableAnswer] = useState('');
 
+  // Edit questions Tomer --> unique component
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableQuestion, setEditableQuestion] = useState('');
+
+  useEffect(() => {
+    if (quizData) {
+      setEditableQuestion(quizData.question);
+    }
+  }, [quizData]);
+
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleChangeQuestion = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditableQuestion(event.target.value);
+  };
+
+  const handleBlur = () => {
+    if (quizData) {
+      setQuizData({...quizData, question: editableQuestion});
+    }
+    setIsEditing(false);
+  };
+
+  const handleAnswerDoubleClick = (index: number) => {
+    setEditingIndex(index);
+    setEditableAnswer(quizData ? quizData.answers[index] : '');
+  };
+
+  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditableAnswer(event.target.value);
+  };
+
+  const handleAnswerBlur = () => {
+    if (quizData && editingIndex !== null) {
+      const updatedAnswers = [...quizData.answers];
+      updatedAnswers[editingIndex] = editableAnswer;
+      setQuizData({...quizData, answers: updatedAnswers});
+      setEditingIndex(null);
+    }
+  };
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -46,6 +93,8 @@ const navigate = useNavigate();
   
     fetchFiles();
   }, []);
+
+  // Edit questions Tomer unique component
   
 
   const handleSaveQuestion = async () => {
@@ -193,9 +242,9 @@ const navigate = useNavigate();
 
         {fileNames.map(fileName => (
                 <Link
-                    key={fileName}  // Ensure key is unique and stable
-                    to={`/quiz/${fileName}/1`}  // Construct the URL dynamically
-                    className="quiz-link"  // Styling class for the link
+                    key={fileName}
+                    to={`/quiz/${fileName}/1`} 
+                    className="quiz-link" 
                 >
                     {fileName}
                 </Link>
@@ -203,12 +252,6 @@ const navigate = useNavigate();
 
 
       
-
-        {/* {files.map(file => (
-          <button key={file.name} onClick={() => handleFileSelect(file)}>
-            {file.name}
-          </button>
-        ))} */}
         <button onClick={toggleModal} className="modalButton">{file?.name}</button>
 
       </div>
@@ -233,9 +276,7 @@ const navigate = useNavigate();
       <Modal isOpen={showModal} onClose={toggleModal}>
       <div dangerouslySetInnerHTML={{ __html: renderMarkdown(markdown) as unknown as string }} />
        </Modal>
-      {/* <Modal isOpen={showModal} onClose={toggleModal}>
-      <div dangerouslySetInnerHTML={{ __html: renderMarkdown(selectedFile.content) }} />
-       </Modal> */}
+
 
       {fileUploaded &&
               <div className="title-text">
@@ -248,18 +289,33 @@ const navigate = useNavigate();
 
         <textarea 
     className="questionArea" 
-    value={quizData && quizData.question ? quizData.question : ''} 
-    readOnly 
+    value={isEditing ? editableQuestion : (quizData ? quizData.question : '')}
+    onChange={handleChangeQuestion}
+    onDoubleClick={handleDoubleClick}
+    onBlur={handleBlur}
+    readOnly={!isEditing}
   />
-  <ul className="optionsContainer">
-    {quizData && quizData.answers ? (
-      quizData.answers.map((answer, index) => (
-        <li key={index} className="optionItem">{answer}</li>
-      ))
-    ) : (
-      <li className="optionItem">No options available</li>
-    )}
-  </ul>
+    <ul className="optionsContainer">
+      {quizData && quizData.answers ? (
+        quizData.answers.map((answer, index) => (
+          editingIndex === index ? (
+            <input
+              key={index}
+              value={editableAnswer}
+              onChange={handleAnswerChange}
+              onBlur={handleAnswerBlur}
+              autoFocus
+            />
+          ) : (
+            <li key={index} className="optionItem" onDoubleClick={() => handleAnswerDoubleClick(index)}>
+              {answer}
+            </li>
+          )
+        ))
+      ) : (
+        <li className="optionItem">No options available</li>
+      )}
+    </ul>
   <div>
     <h3 className={`correctAnswerText ${quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? 'visible' : 'hidden'}`}>
     Correct Answer
@@ -269,11 +325,12 @@ const navigate = useNavigate();
     {quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? quizData.answers[quizData.right_answer] : ''}
     </span>
   </div>
+  <button className="saveButton" onClick={handleSaveQuestion}> Save </button>
 
         </div>
+        
         }
 
-  <button className="saveButton" onClick={handleSaveQuestion}> Save </button>
 
 
 

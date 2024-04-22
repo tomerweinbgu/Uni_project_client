@@ -1,41 +1,4 @@
 
-
-.uploadButton, .changeButton, .modalButton {
-    display: block;
-    width: 100%;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 20px;
-  }
-  
-  .uploadButton {
-    background-color: #007BFF;
-  }
-  
-  .uploadButton:hover {
-    background-color: #0056b3;
-  }
-  
-  .changeButton {
-    background-color: #3ecd16;
-  }
-  
-  .changeButton:hover {
-    background-color: #259407;
-  }
-  
-  .modalButton {
-    background-color: #007BFF;
-  }
-  
-  .modalButton:hover {
-    background-color: #0056b3;
-  }
   
   .questionArea {
     width: 100%;
@@ -54,49 +17,31 @@
   }
   
   .optionItem {
-    list-style: none;
     padding: 10px;
-    margin-bottom: 10px;
-    background-color: #dee2e6;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
+    margin: 5px;
+    background-color: #f0f0f0;
     cursor: pointer;
+    border-radius: 5px;
     transition: background-color 0.3s;
-  }
+}
+
+.optionItem:hover {
+    background-color: #e0e0e0;
+}
+
+.correct {
+    background-color: #4CAF50;
+}
+
+.incorrect {
+    background-color: #F44336;
+}
+
   
   .optionItem:hover {
     background-color: #e9ecef;
   }
   
-  .correctAnswer {
-    margin-top: 20px;
-    font-weight: bold;
-    color: #28a745;
-  }
-  
-  .fileInput {
-    display: block;  /* Makes it a block element which respects margin: auto */
-    margin: 0 auto;  /* Sets top and bottom margins to 0 and left and right margins to auto */
-    padding: 8px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    width: 70%; /* Adjust the width as needed */
-  }
-  
-  
-  .correctAnswer {
-    color: #ffffff;
-    font-size: 16px;
-    margin-top: 20px;
-  }
-  
-  .correctAnswer.hidden {
-    display: none;
-  }
-  
-  .correctAnswer.visible {
-    display: block;
-  }
   
   .questionUploadContainer {
     display: flex;
@@ -129,18 +74,7 @@
     gap: 120px;
     min-height: 100vh;
   }
-  
-  .sideBar {
-    width: 200px;
-    max-width: 200px;
-    height: 500px;
-    background-color: #f8f9fa;
-    border-right: 1px solid #dee2e6;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-  }
+
   
   .specificQuizContainer {
     width: 600px;
@@ -163,5 +97,31 @@
     flex-direction: row;
   }
  
-  
+  .prevOrNextButton {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #007BFF; /* Blue background */
+    color: white; /* White text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover and click */
+}
+
+.prevOrNextButton:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.prevOrNextButton:disabled {
+    background-color: #cccccc; /* Gray background for disabled state */
+    cursor: not-allowed; /* Cursor indicates button is disabled */
+    transform: none;
+    color: #666666; /* Dark gray text for disabled state */
+}
+
+    
+
+
   
