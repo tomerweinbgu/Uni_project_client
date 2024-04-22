@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { APP_API_URL, LOAD_SPECIFIC_QUIZ_API } from '../../common/consts/ApiPaths';
+
 import "./QuizArchive.css";
 
 interface QuizData {
@@ -30,7 +32,7 @@ const QuizPage: React.FC = () => {
             formData.append('file_name', quizName);
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/load_specific_quiz', {
+                const response = await fetch(`${APP_API_URL}/${LOAD_SPECIFIC_QUIZ_API}`, {
                     method: 'POST',
                     body: formData
                 });

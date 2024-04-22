@@ -1,22 +1,11 @@
 import { useEffect, useState } from "react";
 import "./AmericanQuestion.css";
+import { AmericanQuestionProps} from './../../common/interfaces/QuizData';
+import { APP_API_URL, ADD_QUESTIONS_TO_QUIZ_API } from '../../common/consts/ApiPaths';
 
 
-interface QuizData {
-question: string;
-answers: string[];
-right_answer: number;
-assistant_id: string;
-thread_id: string;
-file_name?: string;
-}
 
-  interface AmericanQuestionProps {
-    quizData: QuizData | null;
-    updateQuizData: (data: QuizData | null) => void;
-    file_name: string;
-  }
-  
+
 
 
 const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuizData, file_name}) => {
@@ -74,7 +63,7 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
           if (file_name) quizData.file_name = file_name 
 
           try {
-            const response = await fetch('http://127.0.0.1:8000/add_question_to_quiz', {
+            const response = await fetch(`${APP_API_URL}/${ADD_QUESTIONS_TO_QUIZ_API}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -115,7 +104,7 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
                     onBlur={handleAnswerBlur}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                        handleAnswerBlur(); // Triggers the blur function on Enter key press
+                        handleAnswerBlur();
                         }
                     }}
                     autoFocus

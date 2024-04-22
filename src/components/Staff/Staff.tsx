@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from "react";
-import "./StaffQuestionGeneration.css";
+import "./Staff.css";
 import { useNavigate, Link } from "react-router-dom";
-import { marked } from 'marked'; // If 'marked' is a named export
+import { marked } from 'marked';
 
-import Modal from "../Modal/Modal"; // Import Modal component
+import Modal from "../Modal/Modal";
 import AmericanQuestion from "../AmericanQuestion/AmericanQuestion";
-
-interface QuizData {
-  question: string;
-  answers: string[];
-  right_answer: number;
-  assistant_id: string;
-  thread_id: string;
-  file_name?: string;
-}
+import { QuizData} from './../../common/interfaces/QuizData';
+import { APP_API_URL, LOAD_QUIZ_NAMES_API, GENERATE_QUESTION_API, SAVE_FILE_API, UPLOAD_FILE} from '../../common/consts/ApiPaths';
 
 
-
-
-const StaffQuestionGeneration: React.FC = () => {
+const Staff: React.FC = () => {
 const navigate = useNavigate();
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -37,7 +28,7 @@ const navigate = useNavigate();
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/load_quiz_names');
+        const response = await fetch(`${APP_API_URL}/${LOAD_QUIZ_NAMES_API}`);
         const fetchedFileNames = await response.json();
         setFileNames(fetchedFileNames);
 
@@ -48,8 +39,6 @@ const navigate = useNavigate();
   
     fetchFiles();
   }, []);
-
-  
 
 
   const fetchQuestion = async () => {
@@ -64,7 +53,7 @@ const navigate = useNavigate();
     console.log(assistantId, "assistantId")
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/generate_question', {
+      const response = await fetch(`${APP_API_URL}/${GENERATE_QUESTION_API}`, {
         method: 'POST',
         body: formData,
       });;
@@ -93,7 +82,7 @@ const navigate = useNavigate();
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/save_file', {
+      const response = await fetch(`${APP_API_URL}/${SAVE_FILE_API}`, {
         method: 'POST',
         body: formData,
       });
@@ -144,7 +133,7 @@ const navigate = useNavigate();
     formData.append('file', file, file.name);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/upload_file', {
+      const response = await fetch(`${APP_API_URL}/${UPLOAD_FILE}`, {
         method: 'POST',
         body: formData,
       });
@@ -206,7 +195,7 @@ const navigate = useNavigate();
         {fileUploaded &&
           <div className="title-text">
             <button onClick={fetchQuestion} className="uploadButton">Generate a Question</button>
-            
+
             {questionGenerationLoading && <p>Loading...</p>}
             {error && <p className="error">{error}</p>}
 
@@ -221,4 +210,4 @@ const navigate = useNavigate();
 };
 
 
-export default StaffQuestionGeneration;
+export default Staff;

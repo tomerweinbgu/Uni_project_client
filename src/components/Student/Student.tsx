@@ -5,21 +5,10 @@ import { useNavigate, Link } from "react-router-dom";
 import hljs from "highlight.js";
 import "highlight.js/styles/base16/atelier-dune-light.min.css";
 
-// interface AnswerObject {
-//     contentType: string;
-//     answer: string;
-//   }
+import { APP_API_URL, LOAD_QUIZ_NAMES_API, ASK_QUESTION_API, UPLOAD_FILE} from '../../common/consts/ApiPaths';
+import { AnswerPartObject, AnswerObject} from './../../common/interfaces/AskQuestion'
 
-interface AnswerPartObject {
-    type: string;
-    content: string;
-  }
 
-interface AnswerObject {
-    content: string;
-    thread_id: string;
-    assistant_id: string;
-  }
 
 const StaffQuestionGeneration: React.FC = () => {
 const navigate = useNavigate();
@@ -41,7 +30,7 @@ const navigate = useNavigate();
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/load_quiz_names');
+        const response = await fetch(`${APP_API_URL}/${LOAD_QUIZ_NAMES_API}`);
         const fetchedFileNames = await response.json();
         setFileNames(fetchedFileNames);
 
@@ -57,7 +46,7 @@ const navigate = useNavigate();
     if (!answer) {
       return;
     }
-    const parts = answer.content.split(/(`.*?`)/g); // Split the answer by code marked with backticks
+    const parts = answer.content.split(/(`.*?`)/g);
     const processedParts = parts.map(part => {
       if (part.startsWith('```typescript') && part.endsWith('```')) {
         return {
@@ -102,7 +91,7 @@ const navigate = useNavigate();
     if (assistantId) formData.append('assistant_id', assistantId);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/ask_question', {
+      const response = await fetch(`${APP_API_URL}/${ASK_QUESTION_API}`, {
         method: 'POST',
         body: formData,
       });;
@@ -148,7 +137,7 @@ const navigate = useNavigate();
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/upload_file', {
+      const response = await fetch(`${APP_API_URL}/${UPLOAD_FILE}`, {
         method: 'POST',
         body: formData,
       });
