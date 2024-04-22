@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { marked } from 'marked'; // If 'marked' is a named export
 
 import Modal from "../Modal/Modal"; // Import Modal component
+import AmericanQuestion from "../AmericanQuestion/AmericanQuestion";
 
 interface QuizData {
   question: string;
@@ -30,54 +31,8 @@ const navigate = useNavigate();
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
   const [markdown, setMarkdown] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [files, setFiles] = useState<File[]>([]);
-  const [selectedFile, setSelectedFile] = useState<string>("");
   const [fileNames, setFileNames] = useState<string[]>([]);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editableAnswer, setEditableAnswer] = useState('');
 
-  // Edit questions Tomer --> unique component
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableQuestion, setEditableQuestion] = useState('');
-
-  useEffect(() => {
-    if (quizData) {
-      setEditableQuestion(quizData.question);
-    }
-  }, [quizData]);
-
-  const handleDoubleClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleChangeQuestion = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditableQuestion(event.target.value);
-  };
-
-  const handleBlur = () => {
-    if (quizData) {
-      setQuizData({...quizData, question: editableQuestion});
-    }
-    setIsEditing(false);
-  };
-
-  const handleAnswerDoubleClick = (index: number) => {
-    setEditingIndex(index);
-    setEditableAnswer(quizData ? quizData.answers[index] : '');
-  };
-
-  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditableAnswer(event.target.value);
-  };
-
-  const handleAnswerBlur = () => {
-    if (quizData && editingIndex !== null) {
-      const updatedAnswers = [...quizData.answers];
-      updatedAnswers[editingIndex] = editableAnswer;
-      setQuizData({...quizData, answers: updatedAnswers});
-      setEditingIndex(null);
-    }
-  };
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -94,31 +49,7 @@ const navigate = useNavigate();
     fetchFiles();
   }, []);
 
-  // Edit questions Tomer unique component
   
-
-  const handleSaveQuestion = async () => {
-    if (quizData) {
-      if (file) quizData.file_name = file.name 
-      // console.log(file?.name)
-      // console.log("hey", quizData.file_name)
-      try {
-        const response = await fetch('http://127.0.0.1:8000/add_question_to_quiz', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(quizData)
-        });
-
-      console.log('Question fetched successfully:');
-    } catch (error) {
-      console.error('Failed to fetch question:', error);
-      setError('Failed to fetch question');
-      setQuizData(null);
-    }
-  }
-};
 
 
   const fetchQuestion = async () => {
@@ -160,7 +91,6 @@ const navigate = useNavigate();
 
     const formData = new FormData();
     formData.append('file', file);
-    console.log("hey")
 
     try {
       const response = await fetch('http://127.0.0.1:8000/save_file', {
@@ -186,8 +116,6 @@ const navigate = useNavigate();
     const text = await file.text();
 
     setMarkdown(text);
-    console.log("checkcheckcheck")
-    console.log(text)
     setFileUploaded(true);
     }
   };
@@ -241,102 +169,53 @@ const navigate = useNavigate();
         Sidebar
 
         {fileNames.map(fileName => (
-                <Link
-                    key={fileName}
-                    to={`/quiz/${fileName}/1`} 
-                    className="quiz-link" 
-                >
-                    {fileName}
-                </Link>
-            ))}
+          <Link
+              key={fileName}
+              to={`/quiz/${fileName}/1`} 
+              className="quiz-link" 
+          >
+              {fileName}
+          </Link>
+        ))}
 
-
-      
         <button onClick={toggleModal} className="modalButton">{file?.name}</button>
 
       </div>
-    <div className="quizContainer">
-      <div className="inputContainer">
-        <button className="saveButton" onClick={handleSaveFile}> Save </button>
-        <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
-      </div>
-      <div className="questionUploadContainer">
-        {fileUploaded ? <button onClick={uploadFile} className="changeButton">Change File</button> : 
-        <button onClick={uploadFile} className="uploadButton">Upload File</button>}
 
-
-      
-      </div>
-
-      {uploadLoading && <p>Loading...</p>}
-      {error && <p className="error">{error}</p>}
-
-
-
-      <Modal isOpen={showModal} onClose={toggleModal}>
-      <div dangerouslySetInnerHTML={{ __html: renderMarkdown(markdown) as unknown as string }} />
-       </Modal>
-
-
-      {fileUploaded &&
-              <div className="title-text">
-        <button onClick={fetchQuestion} className="uploadButton">Generate a Question</button>
-
-        { questionGenerationLoading && <p>Loading...</p>}
-      {error && <p className="error">{error}</p>}
-
-        <h3 className="title"> Question: </h3>
-
-        <textarea 
-    className="questionArea" 
-    value={isEditing ? editableQuestion : (quizData ? quizData.question : '')}
-    onChange={handleChangeQuestion}
-    onDoubleClick={handleDoubleClick}
-    onBlur={handleBlur}
-    readOnly={!isEditing}
-  />
-    <ul className="optionsContainer">
-      {quizData && quizData.answers ? (
-        quizData.answers.map((answer, index) => (
-          editingIndex === index ? (
-            <input
-              key={index}
-              value={editableAnswer}
-              onChange={handleAnswerChange}
-              onBlur={handleAnswerBlur}
-              autoFocus
-            />
-          ) : (
-            <li key={index} className="optionItem" onDoubleClick={() => handleAnswerDoubleClick(index)}>
-              {answer}
-            </li>
-          )
-        ))
-      ) : (
-        <li className="optionItem">No options available</li>
-      )}
-    </ul>
-  <div>
-    <h3 className={`correctAnswerText ${quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? 'visible' : 'hidden'}`}>
-    Correct Answer
-    </h3>
-    
-    <span className="correctAnswer">
-    {quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? quizData.answers[quizData.right_answer] : ''}
-    </span>
-  </div>
-  <button className="saveButton" onClick={handleSaveQuestion}> Save </button>
-
+      <div className="quizContainer">
+        <div className="inputContainer">
+          <button className="saveButton" onClick={handleSaveFile}> Save </button>
+          <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
         </div>
-        
+
+        <div className="questionUploadContainer">
+          {fileUploaded ? <button onClick={uploadFile} className="changeButton">Change File</button> : 
+          <button onClick={uploadFile} className="uploadButton">Upload File</button>} 
+        </div>
+
+        {uploadLoading && <p>Loading...</p>}
+        {error && <p className="error">{error}</p>}
+
+
+
+        <Modal isOpen={showModal} onClose={toggleModal}>
+        <div dangerouslySetInnerHTML={{ __html: renderMarkdown(markdown) as unknown as string }} />
+        </Modal>
+
+
+        {fileUploaded &&
+          <div className="title-text">
+            <button onClick={fetchQuestion} className="uploadButton">Generate a Question</button>
+            
+            {questionGenerationLoading && <p>Loading...</p>}
+            {error && <p className="error">{error}</p>}
+
+            {quizData && file?.name && <AmericanQuestion quizData={quizData} updateQuizData={setQuizData} file_name={file.name}/>}
+          </div>
         }
 
-
-
-
-
-<button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
-    </div>
+        <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
+      </div>
     </div>
   );
 };

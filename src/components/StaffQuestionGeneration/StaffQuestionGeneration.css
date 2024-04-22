@@ -37,51 +37,7 @@
   background-color: #0056b3;
 }
 
-.questionArea {
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  resize: none;
-  box-sizing: border-box;
-  font-size: 18px;
-}
 
-.optionsContainer {
-  margin-top: 20px;
-  padding-left: 0;
-}
-
-.optionItem {
-  list-style: none;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.optionItem:hover {
-  background-color: #e9ecef;
-}
-
-.correctAnswer {
-  margin-top: 20px;
-  font-weight: bold;
-  color: #28a745;
-}
-
-.fileInput {
-  display: block;  /* Makes it a block element which respects margin: auto */
-  margin: 0 auto;  /* Sets top and bottom margins to 0 and left and right margins to auto */
-  padding: 8px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  width: 70%; /* Adjust the width as needed */
-}
 
 
 .correctAnswer {
@@ -123,19 +79,6 @@
   background-color: #b1b1b1;
 }
 
-.correctAnswerText {
-  color: #008f2d;
-}
-
-
-.correctAnswerText.hidden {
-  display: none;
-}
-
-.correctAnswerText.visible {
-  display: block;
-}
-
 .fullContainer {
   display: flex;
   flex-direction: row;
@@ -175,32 +118,6 @@
   flex-direction: row;
 }
 
-.saveButton {
-  display: block;
-  width: 10%;
-  font-size: 16px;
-  color: #007BFF; /* Blue text to contrast with white background */
-  background-color: #fff; /* White background */
-  border: 2px solid #007BFF; /* Blue border to match the text */
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
-}
-
-.saveButton:hover {
-  background-color: #007BFF; /* Blue background on hover */
-  color: #fff; /* White text on hover */
-  border-color: #0056b3; /* Darker blue border on hover */
-  transition: background-color 0.8s, color 0.8s, border-color 0.8s;
-}
-
-.saveButton:active {
-  background-color: #ccc; /* Gray background when clicked */
-  color: #333; /* Dark text when clicked */
-  border-color: #aaa; /* Dark gray border when clicked */
-  transition: background-color 0.8s, color 0.8s, border-color 0.8s;
-
-}
 
 .quizButton {
   padding: 6px 10px;
