@@ -3,19 +3,30 @@ import { useNavigate } from "react-router-dom";
 import { QuizData } from "../../common/interfaces/QuizData";
 import { APP_API_URL, GENERATE_QUESTION_API, SAVE_FILE_API, UPLOAD_FILE } from "../../common/consts/ApiPaths";
 import AmericanQuestion from "../AmericanQuestion/AmericanQuestion";
+import "./StaffBox.css";
 
-const StaffBox: React.FC = () => {
+
+interface StaffBoxProps {
+  file: File | null;
+  markdown: string;
+  fileId: string;
+  onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onMarkdownChange: (markdown: string) => void;
+  onFileIdChange: (fileId: string) => void;
+}
+
+const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange, onMarkdownChange, onFileIdChange}) => {
     const navigate = useNavigate();
   const [quizData, setQuizData] = useState<QuizData | null>(null);
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [questionGenerationLoading, setQuestionGenerationLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [fileId, setFileId] = useState<string>("");
+  // const [fileId, setFileId] = useState<string>("");
   const [assistantId, setAssistantId] = useState<string>("");
   const [threadId, setThreadId] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
-  const [markdown, setMarkdown] = useState<string>("");
+  // const [markdown, setMarkdown] = useState<string>("");
 
 
 
@@ -24,10 +35,13 @@ const StaffBox: React.FC = () => {
     setError("");
 
     const formData = new FormData();
+    console.log(fileId, "fileId")
     formData.append('file_id', fileId);
+    
     if (threadId) formData.append('thread_id', threadId);
     if (assistantId) formData.append('assistant_id', assistantId);
     console.log(threadId, "threadId")
+    
     console.log(assistantId, "assistantId")
 
     try {
@@ -75,17 +89,17 @@ const StaffBox: React.FC = () => {
 
   }
 
-  const handleFileChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(event.target.files ? event.target.files[0] : null);
+  // const handleFileChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setFile(event.target.files ? event.target.files[0] : null);
     
-    if (file !== null){ 
-      console.log(file.name, "file_name")
-    const text = await file.text();
+  //   if (file !== null){ 
+  //     console.log(file.name, "file_name")
+  //   const text = await file.text();
 
-    setMarkdown(text);
-    setFileUploaded(true);
-    }
-  };
+  //   setMarkdown(text);
+  //   setFileUploaded(true);
+  //   }
+  // };
 
   const goBackToLobby = () => {
     navigate("/"); 
@@ -100,7 +114,9 @@ const StaffBox: React.FC = () => {
     
     const text = await file.text();
 
-    setMarkdown(text);
+    console.log("text")
+    // setMarkdown(text);
+    onMarkdownChange(text);
 
     setUploadLoading(true);
     setError("");
@@ -113,7 +129,7 @@ const StaffBox: React.FC = () => {
         body: formData,
       });
       const result = await response.json();
-      setFileId(result);
+      onFileIdChange(result);
       console.log('File uploaded successfully:', result);
       setFileUploaded(true);
     } catch (error) {
@@ -128,7 +144,9 @@ const StaffBox: React.FC = () => {
         <div className="quizContainer">
         <div className="inputContainer">
           <button className="saveButton" onClick={handleSaveFile}> Save </button>
-          <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
+          {/* <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" /> */}
+          {/* check */}
+          <input type="file" className="fileInput" onChange={onFileChange} accept=".md" />
         </div>
 
         <div className="questionUploadContainer">
