@@ -34,7 +34,7 @@ const Staff: React.FC = () => {
 
   return (
     <div className="fullContainer">
-      <SideBar file={file} markdown={markdown}/>
+      <SideBar file={file}/>
       <StaffBox
         file={file}
         markdown={markdown}

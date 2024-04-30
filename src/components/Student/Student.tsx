@@ -7,6 +7,7 @@ import "highlight.js/styles/base16/atelier-dune-light.min.css";
 
 import { APP_API_URL, LOAD_QUIZ_NAMES_API, ASK_QUESTION_API, UPLOAD_FILE} from '../../common/consts/ApiPaths';
 import { AnswerPartObject, AnswerObject} from './../../common/interfaces/AskQuestion'
+import SideBar from "../SideBar/SideBar";
 
 
 
@@ -155,22 +156,7 @@ const navigate = useNavigate();
 
   return (
     <div className="fullContainer">
-    <div className="sideBar">
-      Sidebar
-
-      {fileNames.map(fileName => (
-              <Link
-                  key={fileName}
-                  to={`/quiz/${fileName}/1`} 
-                  className="quiz-link" 
-              >
-                  {fileName}
-              </Link>
-          ))}
-
-
-  
-    </div>
+      <SideBar file={file}/>
     <div className="quizContainer">
       <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
       <br />

@@ -2,8 +2,7 @@
     display: flex;
     flex-direction: row;
     padding: 10px 20px;
-    gap: 15px;
-
+    gap: 130px;
 }
 
 .saveButton {
@@ -53,14 +52,11 @@
   background-color: #e9ecef;
 }
   
-
-  
-
 .correctAnswer {
-    color: #28527a;
-    font-size: 16px;
-    margin-top: 20px;
-  }
+  color: #28527a;
+  font-size: 16px;
+  margin-top: 20px;
+}
   
 .correctAnswer.hidden {
 display: none;
@@ -70,26 +66,26 @@ display: none;
 display: block;
 }
 
-  .questionArea {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: none;
-    box-sizing: border-box;
-    font-size: 18px;
-  }
-  
-  
-  .fileInput {
-    display: block;  /* Makes it a block element which respects margin: auto */
-    margin: 0 auto;  /* Sets top and bottom margins to 0 and left and right margins to auto */
-    padding: 8px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    width: 70%; /* Adjust the width as needed */
-  }
+.questionArea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+
+
+.fileInput {
+  display: block;  /* Makes it a block element which respects margin: auto */
+  margin: 0 auto;  /* Sets top and bottom margins to 0 and left and right margins to auto */
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  width: 70%; /* Adjust the width as needed */
+}
 
   
 .correctAnswerText {
@@ -97,11 +93,13 @@ display: block;
   }
   
   
-  .correctAnswerText.hidden {
-    display: none;
-  }
-  
-  .correctAnswerText.visible {
-    display: block;
-  }
+.correctAnswerText.hidden {
+  display: none;
+}
+
+.correctAnswerText.visible {
+  display: block;
+}
+
+
   

@@ -123,11 +123,11 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
             <div className="SaveQuestionContainer">
                 <button className="saveButton" onClick={handleSaveQuestion}> Save question</button>
                 <div>
-                    <h3 className={`correctAnswerText ${quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? 'visible' : 'hidden'}`}>
+                    <h3 className={`correctAnswerText ${quizData && quizData.answers && quizData.answers.length >= quizData.right_answer ? 'visible' : 'hidden'}`}>
                     Correct Answer
                     </h3>
                     <span className="correctAnswer">
-                    {quizData && quizData.answers && quizData.answers.length > quizData.right_answer ? quizData.answers[quizData.right_answer] : ''}
+                    {quizData && quizData.answers && quizData.answers.length >= quizData.right_answer ? quizData.right_answer : ''}
                     </span>
                 </div>
             </div>
