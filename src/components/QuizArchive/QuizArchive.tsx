@@ -8,12 +8,9 @@ interface QuizData {
     question: string;
     answers: string[];
     right_answer: number;
+    chosen_answer: number | null;
 }
 
-interface AnswerStatus {
-  selectedAnswer: number | null;
-  isSubmitted: boolean;
-}
 
 const QuizPage: React.FC = () => {
     const navigate = useNavigate();
@@ -21,7 +18,7 @@ const QuizPage: React.FC = () => {
     const [quizDataDic, setQuizDataDic] = useState<QuizData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [answerStatus, setAnswerStatus] = useState<AnswerStatus>({ selectedAnswer: null, isSubmitted: false });
+    const [answerClicked, setAnswerClicked] = useState<number | null>(null);
 
 
     useEffect(() => {
@@ -57,13 +54,18 @@ const QuizPage: React.FC = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    const handleAnswerClick = (index: number) => {
+    const handleAnswerClick = (index: number, quizData: QuizData) => {
         console.log(index, "index")
+        setAnswerClicked(index+1);
+        quizData.chosen_answer = index+1;
     //   if (index+1===right_answer) {
-    //       setAnswerStatus({ selectedAnswer: index, isSubmitted: true });
+    //     setRightAnswerClicked(true);
     //   }
-    //   console.log(answerStatus, "answerStatus")
-  };
+    //   else {  
+    //     setRightAnswerClicked(false);
+    //     }   
+    }
+  ;
 
 
     const currentQuestionIndex = parseInt(questionNumber || "1", 10) - 1;
@@ -76,6 +78,10 @@ const QuizPage: React.FC = () => {
         if (nextQuestionNumber > 0 && nextQuestionNumber <= quizDataDic.length) {
             navigate(`/quiz/${quizName}/${nextQuestionNumber}`);
         }
+        
+        setAnswerClicked(null);
+        
+
     };
 
     const goBackToLobby = () => {
@@ -92,8 +98,10 @@ const QuizPage: React.FC = () => {
             <ul className="optionsContainer">
                 {question.answers.map((answer, index) => (
                     <li key={index}
-                        className={"optionItem"}
-                        onClick={() => handleAnswerClick(index)}>
+                        className={question.chosen_answer == index + 1 || answerClicked == index + 1  ?
+                             (question.right_answer === index + 1 ? "rightAnswer" : "wrongAnswer")
+                              : "optionItem" }
+                        onClick={() => handleAnswerClick(index, question)}>
                         {answer} 
                     </li>
                 ))}

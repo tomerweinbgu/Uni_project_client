@@ -25,9 +25,6 @@
     transition: background-color 0.3s;
 }
 
-.optionItem:hover {
-    background-color: #e0e0e0;
-}
 
 .correct {
     background-color: #4CAF50;
@@ -100,25 +97,45 @@
   .prevOrNextButton {
     padding: 10px 20px;
     margin: 5px;
-    background-color: #007BFF; /* Blue background */
-    color: white; /* White text */
+    background-color: #007BFF; 
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover and click */
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .prevOrNextButton:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: scale(1.05); /* Slightly increase size on hover */
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 .prevOrNextButton:disabled {
-    background-color: #cccccc; /* Gray background for disabled state */
-    cursor: not-allowed; /* Cursor indicates button is disabled */
+    background-color: #cccccc;
+    cursor: not-allowed;
     transform: none;
-    color: #666666; /* Dark gray text for disabled state */
+    color: #666666;
+}
+
+.rightAnswer, .wrongAnswer{
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    list-style-type: none;
+    transition: background-color 0.2s;
+
+}
+
+.rightAnswer {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.wrongAnswer {
+    background-color: #F44336; 
+    color: white; 
 }
 
     

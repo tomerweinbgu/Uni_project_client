@@ -144,8 +144,6 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
         <div className="quizContainer">
         <div className="inputContainer">
           <button className="saveButton" onClick={handleSaveFile}> Save </button>
-          {/* <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" /> */}
-          {/* check */}
           <input type="file" className="fileInput" onChange={onFileChange} accept=".md" />
         </div>
 
