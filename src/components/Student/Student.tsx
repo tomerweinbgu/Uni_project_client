@@ -163,30 +163,30 @@ const navigate = useNavigate();
       <br />
       <div className="questionUploadContainer">
         {fileUploaded ? <button onClick={uploadFile} className="changeButton">Change File</button> : 
-        <button onClick={uploadFile} className="uploadButton">Upload File</button>}
+        <button onClick={uploadFile} className="studentUploadButton">Upload File</button>}
 
       </div>
         
-        {fileUploaded &&
-        <div className="title-text">
-      <h3 className="title"> Question: </h3>
-  <textarea 
-    className="studentQuestionArea" 
-    value={textareaValue}
-    onChange={(e) => setTextareaValue(e.target.value)}
-  />
+      {fileUploaded &&
+      <div className="title-text">
+        <h3 className="title"> Question: </h3>
+        <textarea 
+          className="studentQuestionArea" 
+          value={textareaValue}
+          onChange={(e) => setTextareaValue(e.target.value)}
+        />
 
-<button onClick={fetchQuestion} className="uploadButton">Ask a Question</button>    
-</div>
-        }
+        <button onClick={fetchQuestion} className="studentUploadButton">Ask a Question</button>    
+      </div>
+              }
 
-  {questionLoading && <p>Loading...</p>}
-      {error && <p className="error">{error}</p>}
+      {questionLoading && <p>Loading...</p>}
+          {error && <p className="error">{error}</p>}
 
-<div>
+    <div>
 
 
-<div className="whiteSpaceContainer">
+    <div className="whiteSpaceContainer">
       {segments.map((segment, index) =>
         segment.type === 'code' ? (
           <code key={index} className="inlineCode" dangerouslySetInnerHTML={{ __html: segment.content }} />
@@ -194,16 +194,14 @@ const navigate = useNavigate();
           <span key={index} className="inlineText">{segment.content}</span>
         )
       )}
+      </div>
+
+
     </div>
 
-
+    <button onClick={goBackToLobby} className="studentBackbutton">Back to Lobby</button>
+  </div>
 </div>
-
-<button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
-    </div>
-    </div>
-
-  );
-};
+)};
 
 export default StaffQuestionGeneration;

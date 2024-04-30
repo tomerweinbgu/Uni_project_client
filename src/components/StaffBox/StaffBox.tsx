@@ -18,15 +18,12 @@ interface StaffBoxProps {
 const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange, onMarkdownChange, onFileIdChange}) => {
     const navigate = useNavigate();
   const [quizData, setQuizData] = useState<QuizData | null>(null);
-  // const [file, setFile] = useState<File | null>(null);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [questionGenerationLoading, setQuestionGenerationLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  // const [fileId, setFileId] = useState<string>("");
   const [assistantId, setAssistantId] = useState<string>("");
   const [threadId, setThreadId] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
-  // const [markdown, setMarkdown] = useState<string>("");
 
 
 
@@ -89,18 +86,6 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
 
   }
 
-  // const handleFileChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setFile(event.target.files ? event.target.files[0] : null);
-    
-  //   if (file !== null){ 
-  //     console.log(file.name, "file_name")
-  //   const text = await file.text();
-
-  //   setMarkdown(text);
-  //   setFileUploaded(true);
-  //   }
-  // };
-
   const goBackToLobby = () => {
     navigate("/"); 
   };
@@ -142,32 +127,32 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
     
     return (
         <div className="quizContainer">
-        <div className="inputContainer">
-          <button className="saveButton" onClick={handleSaveFile}> Save </button>
-          <input type="file" className="fileInput" onChange={onFileChange} accept=".md" />
-        </div>
-
-        <div className="questionUploadContainer">
-          {fileUploaded ? <button onClick={uploadFile} className="changeButton">Change File</button> : 
-          <button onClick={uploadFile} className="uploadButton">Upload File</button>} 
-        </div>
-
-        {uploadLoading && <p>Loading...</p>}
-        {error && <p className="error">{error}</p>}
-
-
-        {fileUploaded &&
-          <div className="title-text">
-            <button onClick={fetchQuestion} className="uploadButton">Generate a Question</button>
-
-            {questionGenerationLoading && <p>Loading...</p>}
-            {error && <p className="error">{error}</p>}
-
-            {quizData && file?.name && <AmericanQuestion quizData={quizData} updateQuizData={setQuizData} file_name={file.name}/>}
+          <div className="inputContainer">
+            <button className="saveButton" onClick={handleSaveFile}> Save </button>
+            <input type="file" className="fileInput" onChange={onFileChange} accept=".md" />
           </div>
-        }
 
-        <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
+          <div className="questionUploadContainer">
+            {fileUploaded ? <button onClick={uploadFile} className="changeButton">Change File</button> : 
+            <button onClick={uploadFile} className="uploadButton">Upload File</button>} 
+          </div>
+
+          {uploadLoading && <p>Loading...</p>}
+          {error && <p className="error">{error}</p>}
+
+
+          {fileUploaded &&
+            <div className="title-text">
+              <button onClick={fetchQuestion} className="uploadButton">Generate a Question</button>
+
+              {questionGenerationLoading && <p>Loading...</p>}
+              {error && <p className="error">{error}</p>}
+
+              {quizData && file?.name && <AmericanQuestion quizData={quizData} updateQuizData={setQuizData} file_name={file.name}/>}
+            </div>
+          }
+
+          <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
       </div>
     )
 }
