@@ -18,7 +18,7 @@ interface AnswerStatus {
 const QuizPage: React.FC = () => {
     const navigate = useNavigate();
     const { quizName, questionNumber } = useParams<{quizName: string, questionNumber: string}>();
-    const [quizData, setQuizData] = useState<QuizData[]>([]);
+    const [quizDataDic, setQuizDataDic] = useState<QuizData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [answerStatus, setAnswerStatus] = useState<AnswerStatus>({ selectedAnswer: null, isSubmitted: false });
@@ -42,7 +42,7 @@ const QuizPage: React.FC = () => {
                 }
 
                 const data: QuizData[] = await response.json();
-                setQuizData(data);
+                setQuizDataDic(data);
             } catch (err: any) {
                 setError('Failed to fetch questions: ' + err.message);
             } finally {
@@ -58,20 +58,22 @@ const QuizPage: React.FC = () => {
     if (error) return <div>Error: {error}</div>;
 
     const handleAnswerClick = (index: number) => {
-      if (!answerStatus.isSubmitted) {
-          setAnswerStatus({ selectedAnswer: index, isSubmitted: true });
-      }
+        console.log(index, "index")
+    //   if (index+1===right_answer) {
+    //       setAnswerStatus({ selectedAnswer: index, isSubmitted: true });
+    //   }
+    //   console.log(answerStatus, "answerStatus")
   };
 
 
     const currentQuestionIndex = parseInt(questionNumber || "1", 10) - 1;
-    const question = quizData[currentQuestionIndex];
+    const question = quizDataDic[currentQuestionIndex];
 
     if (!question) return <div>No question found</div>;
 
     const handleNavigation = (offset: number) => {
         const nextQuestionNumber = currentQuestionIndex + offset + 1;
-        if (nextQuestionNumber > 0 && nextQuestionNumber <= quizData.length) {
+        if (nextQuestionNumber > 0 && nextQuestionNumber <= quizDataDic.length) {
             navigate(`/quiz/${quizName}/${nextQuestionNumber}`);
         }
     };
@@ -99,7 +101,7 @@ const QuizPage: React.FC = () => {
 
             <div className="navigationButtons">
                 <button className={"prevOrNextButton"} onClick={() => handleNavigation(-1)} disabled={currentQuestionIndex <= 0}>Previous</button>
-                <button className={"prevOrNextButton"} onClick={() => handleNavigation(1)} disabled={currentQuestionIndex >= quizData.length - 1}>Next</button>
+                <button className={"prevOrNextButton"} onClick={() => handleNavigation(1)} disabled={currentQuestionIndex >= quizDataDic.length - 1}>Next</button>
             </div>
 
             <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
