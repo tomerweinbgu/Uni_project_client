@@ -13,9 +13,10 @@ interface StaffBoxProps {
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onMarkdownChange: (markdown: string) => void;
   onFileIdChange: (fileId: string) => void;
+  onFileSaved: () => void;
 }
 
-const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange, onMarkdownChange, onFileIdChange}) => {
+const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange, onMarkdownChange, onFileIdChange, onFileSaved}) => {
     const navigate = useNavigate();
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
@@ -24,6 +25,7 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
   const [assistantId, setAssistantId] = useState<string>("");
   const [threadId, setThreadId] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
+  const [showSavedText, setShowSavedText] = useState<string>("");
 
 
 
@@ -63,7 +65,7 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
 
   const handleSaveFile = async() => {
     if (!file) {
-      alert('Please select a file first!');
+      changeShownText("NoFile")
       return;
     }
 
@@ -76,6 +78,9 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
         body: formData,
       });
       const result = await response.json();
+
+      onFileSaved();
+      changeShownText("Saved")
 
       console.log('File uploaded successfully:', result);
     } catch (error) {
@@ -90,10 +95,17 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
     navigate("/"); 
   };
 
+  const changeShownText = (text: string) => {
+      setShowSavedText(text)
+      setTimeout(() => {
+        setShowSavedText("");
+    }, 3000); 
+  };
+
 
   const uploadFile = async () => {
     if (!file) {
-      alert('Please select a file first!');
+      changeShownText("NoFile")
       return;
     }
     
@@ -128,7 +140,11 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
     return (
         <div className="quizContainer">
           <div className="inputContainer">
-            <button className="saveButton" onClick={handleSaveFile}> Save </button>
+            <div className="saveContainer">
+              <button className="saveButtonStaff" onClick={handleSaveFile}> Save </button>
+              {showSavedText === "Saved" && <p className="saveText">File saved successfully!</p>}
+              {showSavedText === "NoFile" && <p className="saveText">Please select a file first!</p>}
+            </div>
             <input type="file" className="fileInput" onChange={onFileChange} accept=".md" />
           </div>
 

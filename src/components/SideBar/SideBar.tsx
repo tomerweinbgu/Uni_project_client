@@ -8,6 +8,7 @@ import './SideBar.css';
 
 interface SideBarProps {
     file: File | null;
+    fileSaved: boolean;
   }
 
 interface FileDetail {
@@ -15,7 +16,7 @@ interface FileDetail {
   content: string;
 }
 
-const SideBar: React.FC<SideBarProps> = ({file}) => {
+const SideBar: React.FC<SideBarProps> = ({file, fileSaved}) => {
     const [fileNames, setFileNames] = useState<string[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [filesDetails, setFilesDetails] = useState<FileDetail[]>([]);
@@ -44,9 +45,8 @@ const SideBar: React.FC<SideBarProps> = ({file}) => {
         };
       
         fetchFiles();
-      }, [file]);
+      }, [file, fileSaved]);
 
-    // const toggleModal = () => setShowModal(!showModal);
 
     const renderMarkdown = (markdownText: string) => {
         return marked.parse(markdownText);

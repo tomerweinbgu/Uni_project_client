@@ -9,6 +9,7 @@ const Staff: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [fileId, setFileId] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
+  const [fileSaved, setFileSaved] = useState<boolean>(false);
   const [markdown, setMarkdown] = useState<string>("");
   
   const handleFileIdChange = (fileId: string) => {
@@ -17,6 +18,10 @@ const Staff: React.FC = () => {
 
   const handleMarkdownChange = (newMarkdown: string) => {
     setMarkdown(newMarkdown);
+  };
+
+  const handleFileSave = () => {
+    setFileSaved(true);
   };
 
   const handleFileChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,14 +39,15 @@ const Staff: React.FC = () => {
 
   return (
     <div className="fullContainer">
-      <SideBar file={file}/>
+      <SideBar file={file} fileSaved={fileSaved}/>
       <StaffBox
         file={file}
         markdown={markdown}
         fileId={fileId}
         onFileChange={handleFileChange}
         onMarkdownChange={handleMarkdownChange}
-        onFileIdChange={handleFileIdChange}/>
+        onFileIdChange={handleFileIdChange}
+        onFileSaved={handleFileSave}/>
     </div>
   );
   };
