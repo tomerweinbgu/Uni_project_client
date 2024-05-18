@@ -8,7 +8,6 @@ import "./StaffBox.css";
 
 interface StaffBoxProps {
   file: File | null;
-  markdown: string;
   fileId: string;
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onMarkdownChange: (markdown: string) => void;
@@ -16,7 +15,7 @@ interface StaffBoxProps {
   onFileSaved: () => void;
 }
 
-const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange, onMarkdownChange, onFileIdChange, onFileSaved}) => {
+const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdownChange, onFileIdChange, onFileSaved}) => {
     const navigate = useNavigate();
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
@@ -146,6 +145,7 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, markdown, fileId, onFileChange
               {showSavedText === "NoFile" && <p className="saveText">Please select a file first!</p>}
             </div>
             <input type="file" className="fileInput" onChange={onFileChange} accept=".md" />
+
           </div>
 
           <div className="questionUploadContainer">

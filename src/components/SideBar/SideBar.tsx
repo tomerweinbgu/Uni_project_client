@@ -9,6 +9,7 @@ import './SideBar.css';
 interface SideBarProps {
     file: File | null;
     fileSaved: boolean;
+    typeOfUser: string;
   }
 
 interface FileDetail {
@@ -16,7 +17,7 @@ interface FileDetail {
   content: string;
 }
 
-const SideBar: React.FC<SideBarProps> = ({file, fileSaved}) => {
+const SideBar: React.FC<SideBarProps> = ({file, fileSaved, typeOfUser}) => {
     const [fileNames, setFileNames] = useState<string[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [filesDetails, setFilesDetails] = useState<FileDetail[]>([]);
@@ -87,18 +88,13 @@ const SideBar: React.FC<SideBarProps> = ({file, fileSaved}) => {
         {fileNames.map(fileName => (
         <Link
             key={fileName}
-            to={`/quiz/${fileName}/1`} 
+            to={`/quiz/${typeOfUser}/${fileName}/1`} 
             className="quizButton" 
         >
             {fileName}
         </Link>
         ))}
         
-        {/* <button onClick={toggleModal} className="modalButton">{file?.name}</button>
-        
-        <Modal isOpen={showModal} onClose={toggleModal}>
-            <div dangerouslySetInnerHTML={{ __html: renderMarkdown(markdown) as unknown as string }} />
-        </Modal> */}
     </div>)
     }
 

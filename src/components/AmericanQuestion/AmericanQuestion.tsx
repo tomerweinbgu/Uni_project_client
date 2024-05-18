@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "./AmericanQuestion.css";
 import { AmericanQuestionProps} from './../../common/interfaces/QuizData';
 import { APP_API_URL, ADD_QUESTIONS_TO_QUIZ_API } from '../../common/consts/ApiPaths';
+import { QuizDataFactory } from "../../common/interfaces/QuizData";
+
 
 
 
@@ -14,6 +16,8 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
     const [editableAnswer, setEditableAnswer] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [editableQuestion, setEditableQuestion] = useState('');
+    const [showSavedText, setShowSavedText] = useState<string>("");
+
 
     useEffect(() => {
         if (quizData) {
@@ -61,6 +65,7 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
         
         if (quizData) {
           if (file_name) quizData.file_name = file_name 
+          const quizDataWithId = QuizDataFactory.createQuizData(quizData);
 
           try {
             const response = await fetch(`${APP_API_URL}/${ADD_QUESTIONS_TO_QUIZ_API}`, {
@@ -68,8 +73,14 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(quizData)
+              // body: JSON.stringify(quizData)
+              body: JSON.stringify(quizDataWithId)
             });
+
+          setShowSavedText("Saved")
+          setTimeout(() => {
+            setShowSavedText("");
+        }, 3000); 
     
           console.log('Question fetched successfully:');
         } catch (error) {
@@ -121,7 +132,10 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
             </ul>
 
             <div className="SaveQuestionContainer">
-                <button className="saveButton" onClick={handleSaveQuestion}> Save question</button>
+              <div className="saveContainer">
+                <button className="saveButtonStaff" onClick={handleSaveQuestion}> Save question</button>
+                {showSavedText === "Saved" && <p className="saveText">File saved successfully!</p>}
+              </div>
                 <div>
                     <h3 className={`correctAnswerText ${quizData && quizData.answers && quizData.answers.length >= quizData.right_answer ? 'visible' : 'hidden'}`}>
                     Correct Answer

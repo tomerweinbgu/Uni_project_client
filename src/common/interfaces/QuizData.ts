@@ -9,6 +9,22 @@ export interface QuizData {
     file_name?: string;
 }
 
+export interface QuizDataWithId extends QuizData {
+    id: number;
+}
+
+export class QuizDataFactory {
+    private static idCounter = 0;
+
+    public static createQuizData(data: QuizData): QuizDataWithId {
+        this.idCounter++;
+        return {
+            ...data,
+            id: this.idCounter
+        };
+    }
+}
+
 export interface AmericanQuestionProps {
     quizData: QuizData | null;
     updateQuizData: (data: QuizData | null) => void;

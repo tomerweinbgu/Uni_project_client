@@ -156,7 +156,7 @@ const navigate = useNavigate();
 
   return (
     <div className="fullContainer">
-      <SideBar file={file} fileSaved={false}/>
+      <SideBar file={file} fileSaved={false} typeOfUser={"student"}/>
     <div className="quizContainer">
       <input type="file" className="fileInput" onChange={handleFileChange} accept=".md" />
       <br />

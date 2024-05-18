@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<Lobby />} />
           <Route path="/staff" element={<Staff />} />
           <Route path="/student" element={<Student />} />
-          <Route path="/quiz/:quizName/:questionNumber" element={<QuizArchive />} />
+          <Route path="/quiz/:typeOfUser/:quizName/:questionNumber" element={<QuizArchive />} />
         </Routes>
       </div>
     </Router>

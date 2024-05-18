@@ -39,10 +39,9 @@ const Staff: React.FC = () => {
 
   return (
     <div className="fullContainer">
-      <SideBar file={file} fileSaved={fileSaved}/>
+      <SideBar file={file} fileSaved={fileSaved} typeOfUser={"staff"}/>
       <StaffBox
         file={file}
-        markdown={markdown}
         fileId={fileId}
         onFileChange={handleFileChange}
         onMarkdownChange={handleMarkdownChange}

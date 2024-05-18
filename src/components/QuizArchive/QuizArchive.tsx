@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { APP_API_URL, LOAD_SPECIFIC_QUIZ_API } from '../../common/consts/ApiPaths';
+import { APP_API_URL, DELETE_QUESTION_FROM_ARCHIVE, LOAD_SPECIFIC_QUIZ_API } from '../../common/consts/ApiPaths';
 
 import "./QuizArchive.css";
 
 interface QuizData {
+    id: number;
     question: string;
     answers: string[];
     right_answer: number;
@@ -14,7 +15,7 @@ interface QuizData {
 
 const QuizPage: React.FC = () => {
     const navigate = useNavigate();
-    const { quizName, questionNumber } = useParams<{quizName: string, questionNumber: string}>();
+    const { typeOfUser, quizName, questionNumber } = useParams<{typeOfUser: string, quizName: string, questionNumber: string}>();
     const [quizDataDic, setQuizDataDic] = useState<QuizData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -40,6 +41,7 @@ const QuizPage: React.FC = () => {
 
                 const data: QuizData[] = await response.json();
                 setQuizDataDic(data);
+                console.log(data, "data")
             } catch (err: any) {
                 setError('Failed to fetch questions: ' + err.message);
             } finally {
@@ -58,14 +60,29 @@ const QuizPage: React.FC = () => {
         console.log(index, "index")
         setAnswerClicked(index+1);
         quizData.chosen_answer = index+1;
-    //   if (index+1===right_answer) {
-    //     setRightAnswerClicked(true);
-    //   }
-    //   else {  
-    //     setRightAnswerClicked(false);
-    //     }   
     }
-  ;
+
+    const handleDeleteQuestion = async (quizDataId: number) => {
+        const formData = new FormData();
+        formData.append('file_name', quizDataId.toString());
+        formData.append('file_name', quizName?.toString() || "");
+
+        try {
+            const response = await fetch(`${APP_API_URL}/${DELETE_QUESTION_FROM_ARCHIVE}`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            console.log(`${quizDataId} deleted successfully`)
+        } catch (err: any) {
+            setError('Failed to fetch questions: ' + err.message);
+        }
+    }
+
 
 
     const currentQuestionIndex = parseInt(questionNumber || "1", 10) - 1;
@@ -76,7 +93,7 @@ const QuizPage: React.FC = () => {
     const handleNavigation = (offset: number) => {
         const nextQuestionNumber = currentQuestionIndex + offset + 1;
         if (nextQuestionNumber > 0 && nextQuestionNumber <= quizDataDic.length) {
-            navigate(`/quiz/${quizName}/${nextQuestionNumber}`);
+            navigate(`/quiz/${typeOfUser}/${quizName}/${nextQuestionNumber}`);
         }
         
         setAnswerClicked(null);
@@ -112,7 +129,10 @@ const QuizPage: React.FC = () => {
                 <button className={"prevOrNextButton"} onClick={() => handleNavigation(1)} disabled={currentQuestionIndex >= quizDataDic.length - 1}>Next</button>
             </div>
 
+            {typeOfUser === "staff" ?<button onClick={() => handleDeleteQuestion(question.id)} className="backbutton">Delete</button>: ""}
+
             <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
+            
         </div>
     );
 };
