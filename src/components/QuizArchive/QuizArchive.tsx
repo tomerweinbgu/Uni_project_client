@@ -20,6 +20,8 @@ const QuizPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [answerClicked, setAnswerClicked] = useState<number | null>(null);
+    const [shouldShowDeletedText, setShouldShowDeletedText] = useState<boolean>(false);
+
 
 
     useEffect(() => {
@@ -62,27 +64,34 @@ const QuizPage: React.FC = () => {
         quizData.chosen_answer = index+1;
     }
 
-    const handleDeleteQuestion = async (quizDataId: number) => {
+    const handleDeleteQuestion = async (quizId: number) => {
         const formData = new FormData();
-        formData.append('file_name', quizDataId.toString());
+        formData.append('quiz_id', quizId.toString());
         formData.append('file_name', quizName?.toString() || "");
 
         try {
             const response = await fetch(`${APP_API_URL}/${DELETE_QUESTION_FROM_ARCHIVE}`, {
-                method: 'POST',
+                method: 'DELETE',
                 body: formData
             });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
+            showDeletedText();
 
-            console.log(`${quizDataId} deleted successfully`)
+            console.log(`${quizId} deleted successfully`)
         } catch (err: any) {
             setError('Failed to fetch questions: ' + err.message);
         }
     }
 
+    const showDeletedText = () => {
+        setShouldShowDeletedText(true)
+        setTimeout(() => {
+          setShouldShowDeletedText(false);
+      }, 3000); 
+    };
 
 
     const currentQuestionIndex = parseInt(questionNumber || "1", 10) - 1;
@@ -101,7 +110,7 @@ const QuizPage: React.FC = () => {
 
     };
 
-    const goBackToLobby = () => {
+    const handleBackToLobby = () => {
         navigate("/staff");
     };
 
@@ -130,8 +139,13 @@ const QuizPage: React.FC = () => {
             </div>
 
             {typeOfUser === "staff" ?<button onClick={() => handleDeleteQuestion(question.id)} className="backbutton">Delete</button>: ""}
+            {shouldShowDeletedText === true &&
+             <p className="deletedText">
+                Question has deleted successfully from the db!
+            </p>}
 
-            <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
+
+            <button onClick={handleBackToLobby} className="backbutton">Back to Lobby</button>
             
         </div>
     );

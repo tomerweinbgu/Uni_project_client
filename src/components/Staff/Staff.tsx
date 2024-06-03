@@ -36,6 +36,8 @@ const Staff: React.FC = () => {
     }
   };
 
+  console.log("fileId", fileId)
+
 
   return (
     <div className="fullContainer">
