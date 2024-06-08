@@ -70,6 +70,7 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdo
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('file_id', fileId);
 
     try {
       const response = await fetch(`${APP_API_URL}/${SAVE_FILE_API}`, {
@@ -111,7 +112,6 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdo
     const text = await file.text();
 
     console.log("text")
-    // setMarkdown(text);
     onMarkdownChange(text);
 
     setUploadLoading(true);
@@ -140,7 +140,7 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdo
         <div className="quizContainer">
           <div className="inputContainer">
             <div className="saveContainer">
-              <button className="saveButtonStaff" onClick={handleSaveFile}> Save </button>
+              {fileUploaded && <button className="saveButtonStaff" onClick={handleSaveFile}> Save </button>}
               {showSavedText === "Saved" && <p className="saveText">File saved successfully!</p>}
               {showSavedText === "NoFile" && <p className="saveText">Please select a file first!</p>}
             </div>

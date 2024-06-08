@@ -86,11 +86,13 @@ const navigate = useNavigate();
     setError("");
 
     const formData = new FormData();
-    formData.append('file_id', fileId);
+    console.log(assistantId, "assistant_id")
+    console.log(threadId, "threadId")
+    // formData.append('file_id', fileId);
     formData.append('question', textareaValue);
     if (threadId) formData.append('thread_id', threadId);
     if (assistantId) formData.append('assistant_id', assistantId);
-
+    console.log("wowowow")
     try {
       const response = await fetch(`${APP_API_URL}/${ASK_QUESTION_API}`, {
         method: 'POST',
@@ -98,6 +100,8 @@ const navigate = useNavigate();
       });;
 
       const data: AnswerObject = await response.json();
+      console.log("wowowow2")
+
       setAssistantId(data.assistant_id)
       setThreadId(data.thread_id)
       console.log(data);
