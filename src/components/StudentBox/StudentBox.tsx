@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Student.css";
+import "./StudentBox.css";
 import { useNavigate, Link } from "react-router-dom";
 
 import hljs from "highlight.js";
@@ -12,7 +12,7 @@ import PickFileForStudentQuestionBar from "../PickFileForStudentQuestionBar/Pick
 
 
 
-const Student: React.FC = () => {
+const StudentBox: React.FC = () => {
 const navigate = useNavigate();
   const [answer, setAnswer] = useState<AnswerObject | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -167,46 +167,42 @@ const navigate = useNavigate();
   };
 
   return (
-    <div className="fullContainer">
-      <SideBar file={file} fileSaved={false} typeOfUser={"student"}/>
-      <div className="quizContainer">
-        {
-        <div className="title-text">
-          <h3 className="title"> Question: </h3>
-          <textarea 
-            className="studentQuestionArea" 
-            value={textareaValue}
-            onChange={(e) => setTextareaValue(e.target.value)}
-          />
+    <div className="quizContainer">
+    {
+    <div className="title-text">
+        <h3 className="title"> Question: </h3>
+        <textarea 
+        className="studentQuestionArea" 
+        value={textareaValue}
+        onChange={(e) => setTextareaValue(e.target.value)}
+        />
 
-          <button onClick={fetchQuestion} className="studentUploadButton">Ask a Question</button>    
-        </div>
-                }
+        <button onClick={fetchQuestion} className="studentUploadButton">Ask a Question</button>    
+    </div>
+            }
 
-        {questionLoading && <p>Loading...</p>}
-            {error && <p className="error">{error}</p>}
+    {questionLoading && <p>Loading...</p>}
+        {error && <p className="error">{error}</p>}
 
-      <div>
+    <div>
 
 
-      <div className="whiteSpaceContainer">
-        {segments.map((segment, index) =>
-          segment.type === 'code' ? (
-            <code key={index} className="inlineCode" dangerouslySetInnerHTML={{ __html: segment.content }} />
-          ) : (
-            <span key={index} className="inlineText">{segment.content}</span>
-          )
-        )}
-        </div>
+    <div className="whiteSpaceContainer">
+    {segments.map((segment, index) =>
+        segment.type === 'code' ? (
+        <code key={index} className="inlineCode" dangerouslySetInnerHTML={{ __html: segment.content }} />
+        ) : (
+        <span key={index} className="inlineText">{segment.content}</span>
+        )
+    )}
+    </div>
 
 
-      </div>
+    </div>
 
-      <button onClick={goBackToLobby} className="studentBackbutton">Back to Lobby</button>
-  </div>
-
-  <PickFileForStudentQuestionBar fileClicked={false} onFileIdChange={handleFileIdChanged}/>
+    <button onClick={goBackToLobby} className="studentBackbutton">Back to Lobby</button>
 </div>
+
 )};
 
-export default Student;
+export default StudentBox;
