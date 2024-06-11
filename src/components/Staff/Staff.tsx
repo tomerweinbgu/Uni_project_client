@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Staff.css";
-
 import SideBar from "../SideBar/SideBar";
 import StaffBox from "../StaffBox/StaffBox";
 
@@ -41,7 +40,7 @@ const Staff: React.FC = () => {
 
   return (
     <div className="fullContainer">
-      <SideBar file={file} fileSaved={fileSaved} typeOfUser={"staff"}/>
+      <SideBar fileSaved={fileSaved} typeOfUser={"staff"}/>
       <StaffBox
         file={file}
         fileId={fileId}

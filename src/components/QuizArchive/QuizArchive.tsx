@@ -111,7 +111,7 @@ const QuizPage: React.FC = () => {
     };
 
     const handleBackToLobby = () => {
-        navigate("/staff");
+        navigate(`/${typeOfUser}`);
     };
 
     return (

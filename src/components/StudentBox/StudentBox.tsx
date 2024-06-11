@@ -1,30 +1,27 @@
 import React, { useState, useEffect } from "react";
 import "./StudentBox.css";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import hljs from "highlight.js";
 import "highlight.js/styles/base16/atelier-dune-light.min.css";
 
-import { APP_API_URL, LOAD_QUIZ_NAMES_API, ASK_QUESTION_API, UPLOAD_FILE} from '../../common/consts/ApiPaths';
+import { APP_API_URL, LOAD_QUIZ_NAMES_API, ASK_QUESTION_API} from '../../common/consts/ApiPaths';
 import { AnswerPartObject, AnswerObject} from './../../common/interfaces/AskQuestion'
-import SideBar from "../SideBar/SideBar";
-import PickFileForStudentQuestionBar from "../PickFileForStudentQuestionBar/PickFileForStudentQuestionBar";
+
+interface StudentBoxProps {
+    fileId: string | Blob;
+  }
 
 
-
-const StudentBox: React.FC = () => {
+const StudentBox: React.FC<StudentBoxProps> = ({fileId}) => {
 const navigate = useNavigate();
   const [answer, setAnswer] = useState<AnswerObject | null>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [questionLoading, setQuestionLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [fileId, setFileId] = useState<string>("");
   const [textareaValue, setTextareaValue] = useState<string>("");
-  const [fileUploaded, setFileUploaded] = useState<boolean>(false);
   const [segments, setSegments] = useState<AnswerPartObject[]>([]);
-  const [assistantId, setAssistantId] = useState<string>("");
-  const [threadId, setThreadId] = useState<string>("");
+//   const [assistantId, setAssistantId] = useState<string>("");
+//   const [threadId, setThreadId] = useState<string>("");
   const [fileNames, setFileNames] = useState<string[]>([]);
 
 
@@ -69,7 +66,6 @@ const navigate = useNavigate();
           content: hljs.highlightAuto(part.slice(1, -1)).value
         } as AnswerPartObject;
       } else {
-        // It's regular text
         return {
           type: 'text',
           content: part
@@ -85,29 +81,22 @@ const navigate = useNavigate();
   const fetchQuestion = async () => {
     setQuestionLoading(true);
     setError("");
-    console.log("fileId", fileId)
-
+    
     const formData = new FormData();
-    console.log(assistantId, "assistant_id")
-    console.log(threadId, "threadId")
+    
+    console.log("fileId", fileId)
     formData.append('file_id', fileId);
     formData.append('question', textareaValue);
-    if (threadId) formData.append('thread_id', threadId);
-    if (assistantId) formData.append('assistant_id', assistantId);
-    console.log("wowowow")
+    // if (threadId) formData.append('thread_id', threadId);
+    // if (assistantId) formData.append('assistant_id', assistantId);
     try {
-      const response = await fetch(`${APP_API_URL}/${ASK_QUESTION_API}`, {
-        method: 'POST',
-        body: formData,
-      });;
-
+        const response = await fetch(`${APP_API_URL}/${ASK_QUESTION_API}`, {
+            method: 'POST',
+            body: formData,
+            });;
+            
       const data: AnswerObject = await response.json();
-      console.log("wowowow2")
 
-      setAssistantId(data.assistant_id)
-      setThreadId(data.thread_id)
-      console.log(data);
-      console.log("hey");
       setAnswer(data);
       console.log('Question fetched successfully:', data);
       
@@ -121,83 +110,42 @@ const navigate = useNavigate();
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(event.target.files ? event.target.files[0] : null);
-  };
-
-  const handleFileIdChanged= (newFileId: string) => {
-    setFileId(newFileId);
-  };
-
-
 
   const goBackToLobby = () => {
     navigate("/"); 
   };
 
   const highlightedHtml = hljs.highlightAuto(answer?.content? answer.content : "").value;
-  console.log("check");
   console.log(highlightedHtml);
 
-  const uploadFile = async () => {
-    if (!file) {
-      alert('Please select a file first!');
-      return;
-    }
-    setUploadLoading(true);
-    setError("");
-    const formData = new FormData();
-    formData.append('file', file);
 
-    try {
-      const response = await fetch(`${APP_API_URL}/${UPLOAD_FILE}`, {
-        method: 'POST',
-        body: formData,
-      });
-      const result = await response.json();
-      setFileId(result);
-      console.log('File uploaded successfully:', result);
-      setFileUploaded(true);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      setError('Error uploading file');
-    } finally {
-    setUploadLoading(false);
-    }
-  };
 
   return (
     <div className="quizContainer">
-    {
-    <div className="title-text">
-        <h3 className="title"> Question: </h3>
-        <textarea 
-        className="studentQuestionArea" 
-        value={textareaValue}
-        onChange={(e) => setTextareaValue(e.target.value)}
-        />
+        <div className="title-text">
+            <h3 className="title"> Question: </h3>
+            <textarea 
+            className="studentQuestionArea" 
+            value={textareaValue}
+            onChange={(e) => setTextareaValue(e.target.value)}
+            />
+            <button onClick={fetchQuestion} className="studentUploadButton">Ask a Question</button>    
+        </div>
 
-        <button onClick={fetchQuestion} className="studentUploadButton">Ask a Question</button>    
-    </div>
-            }
+        {questionLoading && <p>Loading...</p>}
+            {error && <p className="error">{error}</p>}
 
-    {questionLoading && <p>Loading...</p>}
-        {error && <p className="error">{error}</p>}
+        <div>
 
-    <div>
-
-
-    <div className="whiteSpaceContainer">
-    {segments.map((segment, index) =>
-        segment.type === 'code' ? (
-        <code key={index} className="inlineCode" dangerouslySetInnerHTML={{ __html: segment.content }} />
-        ) : (
-        <span key={index} className="inlineText">{segment.content}</span>
-        )
-    )}
-    </div>
-
-
+        <div className="whiteSpaceContainer">
+        {segments.map((segment, index) =>
+            segment.type === 'code' ? (
+            <code key={index} className="inlineCode" dangerouslySetInnerHTML={{ __html: segment.content }} />
+            ) : (
+            <span key={index} className="inlineText">{segment.content}</span>
+            )
+        )}
+        </div>
     </div>
 
     <button onClick={goBackToLobby} className="studentBackbutton">Back to Lobby</button>
