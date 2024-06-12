@@ -39,7 +39,7 @@ const Staff: React.FC = () => {
 
 
   return (
-    <div className="fullContainer">
+    <div className="StaffFullContainer">
       <SideBar fileSaved={fileSaved} typeOfUser={"staff"}/>
       <StaffBox
         file={file}

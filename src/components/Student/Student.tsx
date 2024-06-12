@@ -10,7 +10,7 @@ import StudentBox from "../StudentBox/StudentBox";
 
 
 const Student: React.FC = () => {
-  const [fileId, setFileId] = useState<string>("");
+  const [fileId, setFileId] = useState<string | null>(null);
 
   const handleFileIdChanged= (newFileId: string) => {
     setFileId(newFileId);

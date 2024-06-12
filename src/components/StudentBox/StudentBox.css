@@ -1,0 +1,48 @@
+.chooseFile { 
+    color : #da0606;
+    font-size: 18px;
+    font-family: var(--font-family-content);
+}
+
+
+.studentAskQuestionButton {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #007BFF;
+  }
+
+  .studentAskQuestionButton {
+    background-color: #007BFF;
+  }
+  
+  .studentAskQuestionButton:hover {
+    background-color: #0056b3;
+  }
+
+  .studentAskQuestionButton:disabled{
+    cursor: not-allowed;
+    background-color: #3b98fc;
+
+  }
+
+  .inlineCode, .inlineText, .boldText, .numberedStep {
+    display: inline;
+    border-radius: 4px;
+  }
+
+  .inlineCode{
+    background-color: #f4f4f4;
+  }
+
+  .boldText{
+    font-weight: bold;
+  }
+
+  

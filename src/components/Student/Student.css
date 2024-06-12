@@ -112,6 +112,10 @@
     transition: background-color 0.3s;
   }
 
+  .fullContainer{
+    margin-left: 240px;
+  }
+
 
   
  

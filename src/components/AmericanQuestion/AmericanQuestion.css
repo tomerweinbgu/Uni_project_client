@@ -1,34 +1,8 @@
 .SaveQuestionContainer{
     display: flex;
     flex-direction: row;
-    padding: 10px 20px;
-    gap: 130px;
-}
-
-.saveButton {
-    display: block;
-    width: 14%;
-    font-size: 16px;
-    color: #007BFF; 
-    background-color: #fff;
-    border: 2px solid #007BFF;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
-  }
-  
-.saveButton:hover {
-    background-color: #007BFF; 
-    color: #fff;
-    border-color: #0056b3;
-    transition: background-color 0.8s, color 0.8s, border-color 0.8s;
-}
-
-.saveButton:active {
-    background-color: #ccc;
-    color: #333;
-    border-color: #aaa;
-    transition: background-color 0.8s, color 0.8s, border-color 0.8s;
+    gap: 45px;
+    margin-bottom: 15px;
 }
 
 
@@ -102,4 +76,28 @@ display: block;
 }
 
 
-  
+.saveButtonStaff{
+  display: block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background-color: #007BFF;
+}
+
+.saveButtonStaff:hover {
+  background-color: #0056b3;
+  color: #fff;
+  border-color: #0056b3;
+  transition: background-color 0.8s, color 0.8s, border-color 0.8s;
+}
+
+.saveButtonStaff:active {
+  background-color: #ccc;
+  color: #333;
+  border-color: #aaa;
+  transition: background-color 0.8s, color 0.8s, border-color 0.8s;
+}

@@ -132,18 +132,19 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
             </ul>
 
             <div className="SaveQuestionContainer">
-              <div className="saveContainer">
+              <div className="saveContainerStaff">
                 <button className="saveButtonStaff" onClick={handleSaveQuestion}> Save question</button>
                 {showSavedText === "Saved" && <p className="saveText">File saved successfully!</p>}
               </div>
-                <div>
-                    <h3 className={`correctAnswerText ${quizData && quizData.answers && quizData.answers.length >= quizData.right_answer ? 'visible' : 'hidden'}`}>
-                    Correct Answer
-                    </h3>
-                    <span className="correctAnswer">
-                    {quizData && quizData.answers && quizData.answers.length >= quizData.right_answer ? quizData.right_answer : ''}
-                    </span>
-                </div>
+
+              <div>
+                  <h3 className={`correctAnswerText ${quizData && quizData.answers && quizData.answers.length >= quizData.right_answer ? 'visible' : 'hidden'}`}>
+                  Correct Answer
+                  </h3>
+                  <span className="correctAnswer">
+                  {quizData && quizData.answers && quizData.answers.length >= quizData.right_answer ? quizData.right_answer : ''}
+                  </span>
+              </div>
             </div>
         </div>
     )

@@ -168,7 +168,7 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdo
             </div>
           }
 
-          <button onClick={goBackToLobby} className="backbutton">Back to Lobby</button>
+          <button onClick={goBackToLobby} className="StaffBackButton">Back to Lobby</button>
       </div>
     )
 }

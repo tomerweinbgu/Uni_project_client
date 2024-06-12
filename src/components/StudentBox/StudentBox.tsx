@@ -9,9 +9,25 @@ import { APP_API_URL, LOAD_QUIZ_NAMES_API, ASK_QUESTION_API} from '../../common/
 import { AnswerPartObject, AnswerObject} from './../../common/interfaces/AskQuestion'
 
 interface StudentBoxProps {
-    fileId: string | Blob;
+    fileId: string | null;
   }
 
+enum TypesOfRegex {
+  CodeBlock = "`[^`]*`",
+  UploadedFileAnswer = "Based on the content of the uploaded file:",
+  ChatGPTAnswer = "Based on the chatGPT engine:",
+  // NumberedStep = "\\b[0-9]+\\."
+  NumberedStep = "/b(3/.|4/.)"
+
+  // NumberedStep = "^\d+\.$"
+}
+
+enum TypeOfContent {
+  Code = "code",
+  Text = "text",
+  Bold = "bold",
+  NumberedStep = "numberedStep",
+}
 
 const StudentBox: React.FC<StudentBoxProps> = ({fileId}) => {
 const navigate = useNavigate();
@@ -45,29 +61,70 @@ const navigate = useNavigate();
     if (!answer) {
       return;
     }
-    const parts = answer.content.split(/(`.*?`)/g);
+    // const parts = answer.content.split(/(`.*?`)/g);
+    // const parts = answer.content.split(/(`[^`]*`)/g);
+
+    console.log("1.".match(new RegExp(TypesOfRegex.NumberedStep)))
+    console.log("2.".match(TypesOfRegex.NumberedStep))
+    console.log(" 3. ".match(new RegExp(TypesOfRegex.NumberedStep)))
+    console.log(" 3. ".match(new RegExp(TypesOfRegex.NumberedStep)))
+    
+    const regexPattern = new RegExp(
+      `(${TypesOfRegex.CodeBlock}|${TypesOfRegex.UploadedFileAnswer}
+      |${TypesOfRegex.ChatGPTAnswer}|${TypesOfRegex.NumberedStep} )`,
+      "g"
+    );
+    const parts = answer.content.split(regexPattern);
+
+
+    console.log("parts")
+    console.log(parts)
     const processedParts = parts.map(part => {
-      if (part.startsWith('```typescript') && part.endsWith('```')) {
+      if (part === undefined) {
         return {
-          type: 'code',
+          type: TypeOfContent.Text,
+          content:""
+        } as AnswerPartObject; 
+      }
+    // else if (part.match(new RegExp(TypesOfRegex.NumberedStep))) {
+    //   return {
+    //       type: TypeOfContent.NumberedStep,
+    //       content: part
+    //     } as AnswerPartObject;
+    //   }
+      else if (part === TypesOfRegex.UploadedFileAnswer || part === TypesOfRegex.ChatGPTAnswer){
+        return {
+          type: TypeOfContent.Bold,
+          content: part
+        } as AnswerPartObject;
+      }
+      else if (part.startsWith('```typescript') && part.endsWith('```')) {
+        return {
+          type: TypeOfContent.Code,
           content: hljs.highlightAuto(part.slice(13, -3)).value
         } as AnswerPartObject;
       }
       else if (part.startsWith('`typescript') && part.endsWith('`')) {
         return {
-          type: 'code',
+          type: TypeOfContent.Code,
           content: hljs.highlightAuto(part.slice(11, -1)).value
         } as AnswerPartObject;
       }
-
       else if (part.startsWith('`') && part.endsWith('`')) {
         return {
-          type: 'code',
+          type: TypeOfContent.Code,
           content: hljs.highlightAuto(part.slice(1, -1)).value
         } as AnswerPartObject;
-      } else {
+      }
+      else if (part.startsWith('`') && part.endsWith('`')) {
         return {
-          type: 'text',
+          type: TypeOfContent.Code,
+          content: hljs.highlightAuto(part.slice(1, -1)).value
+        } as AnswerPartObject;
+      }
+       else {
+        return {
+          type: TypeOfContent.Text,
           content: part
         } as AnswerPartObject;
       }
@@ -85,7 +142,7 @@ const navigate = useNavigate();
     const formData = new FormData();
     
     console.log("fileId", fileId)
-    formData.append('file_id', fileId);
+    fileId ? formData.append('file_id', fileId) : console.log("no file id");
     formData.append('question', textareaValue);
     // if (threadId) formData.append('thread_id', threadId);
     // if (assistantId) formData.append('assistant_id', assistantId);
@@ -129,7 +186,14 @@ const navigate = useNavigate();
             value={textareaValue}
             onChange={(e) => setTextareaValue(e.target.value)}
             />
-            <button onClick={fetchQuestion} className="studentUploadButton">Ask a Question</button>    
+            {fileId ? 
+            <button onClick={fetchQuestion} className="studentAskQuestionButton" disabled={false}>Ask a Question</button> :
+            <div>
+              <button onClick={fetchQuestion} className="studentAskQuestionButton" disabled={true}>Ask a Question</button>     
+              <p className="chooseFile">Choose a file for asking a question</p>
+            </div>
+
+            }
         </div>
 
         {questionLoading && <p>Loading...</p>}
@@ -139,11 +203,13 @@ const navigate = useNavigate();
 
         <div className="whiteSpaceContainer">
         {segments.map((segment, index) =>
-            segment.type === 'code' ? (
-            <code key={index} className="inlineCode" dangerouslySetInnerHTML={{ __html: segment.content }} />
-            ) : (
-            <span key={index} className="inlineText">{segment.content}</span>
-            )
+            segment.type === TypeOfContent.Code ? 
+            (<code key={index} className="inlineCode" dangerouslySetInnerHTML={{ __html: segment.content }} />) :
+            segment.type === TypeOfContent.Bold ? 
+            (<><span key={index} className="boldText">{segment.content}</span> <br /></>) :
+            segment.type === TypeOfContent.NumberedStep ? 
+            ((<><br /><span key={index} className="numberedStep">{segment.content}</span> </>)) :
+            (<span key={index} className="inlineText">{segment.content}</span>)
         )}
         </div>
     </div>
