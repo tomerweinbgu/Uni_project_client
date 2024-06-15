@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./AmericanQuestion.css";
 import { AmericanQuestionProps} from './../../common/interfaces/QuizData';
 import { APP_API_URL, ADD_QUESTIONS_TO_QUIZ_API } from '../../common/consts/ApiPaths';
@@ -14,6 +14,8 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
     const [error, setError] = useState<string>("");
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [editableAnswer, setEditableAnswer] = useState('');
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
     const [isEditing, setIsEditing] = useState(false);
     const [editableQuestion, setEditableQuestion] = useState('');
     const [showSavedText, setShowSavedText] = useState<string>("");
@@ -45,8 +47,8 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
         setEditableAnswer(quizData ? quizData.answers[index] : '');
       };
     
-      const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEditableAnswer(event.target.value);
+      const handleAnswerChange = (e: any) => {
+        setEditableAnswer(e.target.value);
       };
     
       const handleAnswerBlur = () => {
@@ -91,6 +93,15 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
       }
     };
 
+    useEffect(() => {
+      if (textareaRef.current) {
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        textareaRef.current.style.minWidth = '400px';
+        textareaRef.current.style.maxWidth = '800px';
+        textareaRef.current.style.fontSize = '16px';
+      }
+    }, [editableAnswer]);
+
     
     return (
         <div className="questionContainer">
@@ -108,17 +119,20 @@ const AmericanQuestion: React.FC<AmericanQuestionProps> = ({quizData, updateQuiz
             {quizData && quizData.answers ? (
                 quizData.answers.map((answer, index) => (
                 editingIndex === index ? (
-                    <input
-                    key={index}
-                    value={editableAnswer}
-                    onChange={handleAnswerChange}
-                    onBlur={handleAnswerBlur}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                        handleAnswerBlur();
-                        }
-                    }}
-                    autoFocus
+                  <textarea
+                  className="editableAnswerInput"
+                  key={index}
+                  value={editableAnswer}
+                  onChange={handleAnswerChange}
+                  onBlur={handleAnswerBlur}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      handleAnswerBlur();
+                    }
+                  }}
+                  autoFocus
+                  ref={textareaRef}
+                  rows={1}
                     />
                 ) : (
                     <li key={index} className="optionItem" onDoubleClick={() => handleAnswerDoubleClick(index)}>

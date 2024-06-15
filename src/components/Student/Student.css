@@ -47,16 +47,6 @@
   }
 
 
-  .inlineCode, .inlineText {
-    display: inline; /* Keeps inline display */
-    /* background-color: #f4f4f4; Light grey background for code */
-    border-radius: 4px; /* Rounded corners for code snippets */
-  }
-
-  .inlineCode{
-    background-color: #f4f4f4;
-  }
-  
 
   .whiteSpaceContainer {
     margin-top: 20px;

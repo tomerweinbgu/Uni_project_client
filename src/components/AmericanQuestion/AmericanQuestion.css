@@ -101,3 +101,10 @@ display: block;
   border-color: #aaa;
   transition: background-color 0.8s, color 0.8s, border-color 0.8s;
 }
+
+.editableAnswerInput {
+  font-size: 1em; /* Ensure the font size is consistent */
+  border: 1px solid #ccc;
+  padding: 5px;
+  box-sizing: border-box;
+}

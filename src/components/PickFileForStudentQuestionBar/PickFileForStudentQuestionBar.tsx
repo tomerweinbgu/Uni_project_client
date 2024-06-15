@@ -8,13 +8,16 @@ import './PickFileForStudentQuestionBar.css';
 interface SideBarProps {
     fileClicked: boolean;
     onFileIdChange: (newFileId: string) => void;
+    onFileNameChange?: (newFileId: string) => void;
+    onFileUploaded?: (fileUploaded: boolean) => void;
+    fileUploaded?: boolean;
   }
 
   interface FileNameIdDic {
     [key: string]: string;
   }
 
-const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onFileIdChange}) => {
+const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onFileIdChange, onFileNameChange, onFileUploaded, fileUploaded}) => {
     const [filesDetails, setFilesDetails] = useState<FileNameIdDic>({});
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
@@ -41,6 +44,9 @@ const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onF
         setSelectedFile(filename)
         console.log(filesDetails[filename])
         onFileIdChange(filesDetails[filename])
+        
+        if (onFileUploaded) {onFileUploaded(false)}
+        if (onFileNameChange !== undefined) {onFileNameChange(filename)}
     };
 
 
@@ -52,7 +58,7 @@ const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onF
         <button 
           key={fileName} 
           onClick={() => handleFileSelect(fileName)}
-          className={`filesForQuestionAsking ${selectedFile === fileName ? 'selected' : ''}`}
+          className={fileUploaded ? 'filesForQuestionAsking' : `filesForQuestionAsking ${selectedFile === fileName ? 'selected' : ''}`}
         >
           {fileName}
         </button>

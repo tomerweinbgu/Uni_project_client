@@ -2,17 +2,25 @@ import React, { useState } from "react";
 import "./Staff.css";
 import SideBar from "../SideBar/SideBar";
 import StaffBox from "../StaffBox/StaffBox";
+import PickFileForStudentQuestionBar from "../PickFileForStudentQuestionBar/PickFileForStudentQuestionBar";
 
 
 const Staff: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [fileId, setFileId] = useState<string>("");
+  const [filename, setFileName] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
   const [fileSaved, setFileSaved] = useState<boolean>(false);
   const [markdown, setMarkdown] = useState<string>("");
+
+
   
-  const handleFileIdChange = (fileId: string) => {
-    setFileId(fileId);
+  const handleFileIdChange = (newFileId: string) => {
+    setFileId(newFileId);
+  };
+
+  const handleFileNameChange = (newFileName: string) => {
+    setFileName(newFileName);
   };
 
   const handleMarkdownChange = (newMarkdown: string) => {
@@ -23,6 +31,10 @@ const Staff: React.FC = () => {
     setFileSaved(true);
   };
 
+  const handleFileUploaded = (fileUploaded: boolean) => {
+    setFileUploaded(fileUploaded);
+  };
+
   const handleFileChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
     setFile(event.target.files ? event.target.files[0] : null);
     
@@ -31,11 +43,11 @@ const Staff: React.FC = () => {
     const text = await file.text();
 
     handleMarkdownChange(text);
-    setFileUploaded(true);
     }
   };
 
-  console.log("fileId", fileId)
+  console.log("file123", fileUploaded)
+
 
 
   return (
@@ -45,9 +57,19 @@ const Staff: React.FC = () => {
         file={file}
         fileId={fileId}
         onFileChange={handleFileChange}
+        onFileUploaded={handleFileUploaded}
         onMarkdownChange={handleMarkdownChange}
         onFileIdChange={handleFileIdChange}
-        onFileSaved={handleFileSave}/>
+        onFileSaved={handleFileSave}
+        fileName={filename}
+        onFileNameChange={handleFileNameChange}/>
+      <PickFileForStudentQuestionBar
+        fileClicked={false}
+        onFileIdChange={handleFileIdChange}
+        onFileNameChange={handleFileNameChange}
+        onFileUploaded={handleFileUploaded}
+        fileUploaded={fileUploaded}/>
+
     </div>
   );
   };

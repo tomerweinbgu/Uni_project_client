@@ -10,12 +10,15 @@ interface StaffBoxProps {
   file: File | null;
   fileId: string;
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFileUploaded: (fileUploaded: boolean) => void;
   onMarkdownChange: (markdown: string) => void;
   onFileIdChange: (fileId: string) => void;
   onFileSaved: () => void;
+  fileName: string;
+  onFileNameChange: (fileName: string) => void;
 }
 
-const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdownChange, onFileIdChange, onFileSaved}) => {
+const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onFileUploaded, onMarkdownChange, onFileIdChange, onFileSaved, fileName, onFileNameChange}) => {
     const navigate = useNavigate();
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
@@ -126,6 +129,7 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdo
       });
       const result = await response.json();
       onFileIdChange(result);
+      onFileNameChange(file.name)
       console.log('File uploaded successfully:', result);
       setFileUploaded(true);
     } catch (error) {
@@ -133,6 +137,7 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdo
       setError('Error uploading file');
     } finally {
         setUploadLoading(false);
+        onFileUploaded(true);
     }
   };
     
@@ -157,14 +162,15 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onMarkdo
           {error && <p className="error">{error}</p>}
 
 
-          {fileUploaded &&
+          {fileName &&
             <div className="title-text">
+              <h3 className="filename"> {fileName} </h3>
               <button onClick={fetchQuestion} className="uploadButton">Generate a Question</button>
 
               {questionGenerationLoading && <p>Loading...</p>}
               {error && <p className="error">{error}</p>}
 
-              {quizData && file?.name && <AmericanQuestion quizData={quizData} updateQuizData={setQuizData} file_name={file.name}/>}
+              {quizData && fileName && <AmericanQuestion quizData={quizData} updateQuizData={setQuizData} file_name={fileName}/>}
             </div>
           }
 
