@@ -142,8 +142,8 @@ const navigate = useNavigate();
     const formData = new FormData();
     
     console.log("fileId", fileId)
-    fileId ? formData.append('file_id', fileId) : console.log("no file id");
     formData.append('question', textareaValue);
+    fileId ? formData.append('file_id', fileId) : console.log("no file id");
     // if (threadId) formData.append('thread_id', threadId);
     // if (assistantId) formData.append('assistant_id', assistantId);
     try {

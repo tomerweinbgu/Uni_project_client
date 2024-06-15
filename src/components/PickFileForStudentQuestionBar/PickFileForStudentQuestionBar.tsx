@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { APP_API_URL, FILENAME_TO_FILEID, LOAD_FILES, LOAD_QUIZ_NAMES_API} from '../../common/consts/ApiPaths';
-import Modal from "../Modal/Modal";
-import { marked } from 'marked';
+import { APP_API_URL, FILENAME_TO_FILEID} from '../../common/consts/ApiPaths';
 import './PickFileForStudentQuestionBar.css';
 
+const ALL_FILES = "All files"
 
 interface SideBarProps {
     fileClicked: boolean;
@@ -41,18 +40,38 @@ const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onF
 
 
     const handleFileSelect = (filename: string) => {
+      if (filename === ALL_FILES) {
+        onFileIdChange("0")
         setSelectedFile(filename)
-        console.log(filesDetails[filename])
+
+
+      } 
+      else{
+        setSelectedFile(filename)
         onFileIdChange(filesDetails[filename])
-        
+      }
+      
+
         if (onFileUploaded) {onFileUploaded(false)}
         if (onFileNameChange !== undefined) {onFileNameChange(filename)}
     };
+
+    console.log(filesDetails)
 
 
     return (      
     <div className="sideBarContainer">
       <h2 className="sideBarBasic">Choose a file for asking a question</h2>
+
+      <>
+        <button 
+        onClick={() => handleFileSelect(ALL_FILES)}
+        className={fileUploaded ? 'allFilesButton' : `allFilesButton ${selectedFile === ALL_FILES ? 'selected' : ''}`}
+        >
+        {ALL_FILES}
+        </button>
+        <br />
+      </>
 
       {Object.keys(filesDetails).map((fileName) => (
         <button 
@@ -62,7 +81,9 @@ const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onF
         >
           {fileName}
         </button>
+        
       ))}
+    
         
     </div>)
     }

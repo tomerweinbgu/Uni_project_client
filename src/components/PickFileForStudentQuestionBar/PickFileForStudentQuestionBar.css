@@ -1,5 +1,5 @@
 
-.filesForQuestionAsking {
+.filesForQuestionAsking, .allFilesButton {
     display: block;
     width: 100%;
     padding: 10px 20px;
@@ -10,14 +10,28 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-top: 7px;    
-    background-color: #098d28;
   }
 
+.filesForQuestionAsking{
+  background-color: #098d28;
+  }
 
 .filesForQuestionAsking:hover {
 background-color: #0aa12b;
-}
+  }
 
 .filesForQuestionAsking.selected {
     background-color: #4fc926;
   }
+
+.allFilesButton{
+  background-color: #d86609;
+  }
+
+.allFilesButton:hover{
+  background-color: #b55507;
+  }
+
+.allFilesButton.selected{
+  background-color: #9d4a07
+  } 
