@@ -7,6 +7,7 @@ const ALL_FILES = "All files"
 interface SideBarProps {
     fileClicked: boolean;
     onFileIdChange: (newFileId: string) => void;
+    typeOfUser: string;
     onFileNameChange?: (newFileId: string) => void;
     onFileUploaded?: (fileUploaded: boolean) => void;
     fileUploaded?: boolean;
@@ -16,7 +17,7 @@ interface SideBarProps {
     [key: string]: string;
   }
 
-const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onFileIdChange, onFileNameChange, onFileUploaded, fileUploaded}) => {
+const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onFileIdChange, typeOfUser, onFileNameChange, onFileUploaded, fileUploaded}) => {
     const [filesDetails, setFilesDetails] = useState<FileNameIdDic>({});
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
@@ -62,7 +63,8 @@ const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onF
     return (      
     <div className="sideBarContainer">
       <h2 className="sideBarBasic">Choose a file for asking a question</h2>
-
+      
+      { typeOfUser === "student" &&
       <>
         <button 
         onClick={() => handleFileSelect(ALL_FILES)}
@@ -72,6 +74,7 @@ const PickFileForStudentQuestionBar: React.FC<SideBarProps> = ({fileClicked, onF
         </button>
         <br />
       </>
+      } 
 
       {Object.keys(filesDetails).map((fileName) => (
         <button 

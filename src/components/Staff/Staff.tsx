@@ -66,6 +66,7 @@ const Staff: React.FC = () => {
       <PickFileForStudentQuestionBar
         fileClicked={false}
         onFileIdChange={handleFileIdChange}
+        typeOfUser={"staff"}
         onFileNameChange={handleFileNameChange}
         onFileUploaded={handleFileUploaded}
         fileUploaded={fileUploaded}/>

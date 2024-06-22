@@ -20,7 +20,10 @@ const Student: React.FC = () => {
     <div className="fullContainer">
       <SideBar fileSaved={false} typeOfUser={"student"}/>
       <StudentBox fileId={fileId}/>
-      <PickFileForStudentQuestionBar fileClicked={false} onFileIdChange={handleFileIdChanged}/>
+      <PickFileForStudentQuestionBar
+        fileClicked={false}
+        onFileIdChange={handleFileIdChanged}
+        typeOfUser={"student"}/>
     </div>
 )};
 

@@ -186,13 +186,19 @@ const navigate = useNavigate();
             value={textareaValue}
             onChange={(e) => setTextareaValue(e.target.value)}
             />
-            {fileId ? 
-            <button onClick={fetchQuestion} className="studentAskQuestionButton" disabled={false}>Ask a Question</button> :
+            {!fileId ? 
             <div>
               <button onClick={fetchQuestion} className="studentAskQuestionButton" disabled={true}>Ask a Question</button>     
               <p className="chooseFile">Choose a file for asking a question</p>
             </div>
-
+            :
+            textareaValue.length == 0 ? 
+            <div>
+              <button onClick={fetchQuestion} className="studentAskQuestionButton" disabled={true}>Ask a Question</button>     
+              <p className="chooseFile">Type a question to ask</p>
+            </div> :
+            <button onClick={fetchQuestion} className="studentAskQuestionButton" disabled={false}>Ask a Question</button> 
+            
             }
         </div>
 
