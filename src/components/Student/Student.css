@@ -102,10 +102,31 @@
     transition: background-color 0.3s;
   }
 
-  .fullContainer{
-    margin-left: 240px;
-  
+  .StudentFullContainer{
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    margin-top: 50px;
+    justify-content: center;
+    gap: 120px;
+    min-height: 100vh;
   }
+
+  .StudentTitle {
+    background-color: #cce5ff;
+    color: #333;
+    padding: 10px 20px; 
+    font-size: 36px;
+    font-weight: bold;
+    border-radius: 8px;
+  }
+
+  .StudentTextTitleContainer {
+    align-items: flex-start;
+
+    margin-bottom: 300px;
+  }
+  
 
 
   

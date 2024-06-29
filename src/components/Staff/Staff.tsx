@@ -53,16 +53,19 @@ const Staff: React.FC = () => {
   return (
     <div className="StaffFullContainer">
       <SideBar fileSaved={fileSaved} typeOfUser={"staff"}/>
-      <StaffBox
-        file={file}
-        fileId={fileId}
-        onFileChange={handleFileChange}
-        onFileUploaded={handleFileUploaded}
-        onMarkdownChange={handleMarkdownChange}
-        onFileIdChange={handleFileIdChange}
-        onFileSaved={handleFileSave}
-        fileName={filename}
-        onFileNameChange={handleFileNameChange}/>
+      <div>
+        <h1 className="StaffTitle">Staff Section</h1>
+        <StaffBox
+          file={file}
+          fileId={fileId}
+          onFileChange={handleFileChange}
+          onFileUploaded={handleFileUploaded}
+          onMarkdownChange={handleMarkdownChange}
+          onFileIdChange={handleFileIdChange}
+          onFileSaved={handleFileSave}
+          fileName={filename}
+          onFileNameChange={handleFileNameChange}/>
+      </div>
       <PickFileForStudentQuestionBar
         fileClicked={false}
         onFileIdChange={handleFileIdChange}

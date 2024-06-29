@@ -1,8 +1,19 @@
 .StaffFullContainer {
     display: flex;
+    align-items: flex-start;
     flex-direction: row;
-    align-items: center;
+    margin-top: 50px;
     justify-content: center;
     gap: 120px;
     min-height: 100vh;
+  }
+
+  
+  .StaffTitle {
+    background-color: #cce5ff;
+    color: #333;
+    padding: 10px 20px; 
+    font-size: 36px;
+    font-weight: bold;
+    border-radius: 8px;
   }
