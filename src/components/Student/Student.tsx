@@ -18,7 +18,6 @@ const Student: React.FC = () => {
 
   return (
     <div className="StudentFullContainer">
-      
       <SideBar fileSaved={false} typeOfUser={"student"}/>
       <div className="StudentTextTitleContainer">
         <h1 className="StudentTitle">Student Section</h1>

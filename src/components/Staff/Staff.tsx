@@ -54,7 +54,7 @@ const Staff: React.FC = () => {
     <div className="StaffFullContainer">
       <SideBar fileSaved={fileSaved} typeOfUser={"staff"}/>
       <div>
-        <h1 className="StaffTitle">Staff Section</h1>
+        <h1 className="StaffTitle">Teaching Staff Section</h1>
         <StaffBox
           file={file}
           fileId={fileId}

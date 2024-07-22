@@ -110,43 +110,51 @@ const QuizPage: React.FC = () => {
 
     };
 
+    const formatQuizName = (name: string) => {
+        return name.replace(/_/g, ' ')
+                   .replace(/\b\w/g, (char) => char.toUpperCase());
+    };
+
     const handleBackToLobby = () => {
         navigate(`/${typeOfUser}`);
     };
 
     return (
-        <div className="specificQuizContainer">
-            <textarea 
-                className="questionArea" 
-                value={question.question} 
-                readOnly 
-            />
-            <ul className="optionsContainer">
-                {question.answers.map((answer, index) => (
-                    <li key={index}
-                        className={question.chosen_answer == index + 1 || answerClicked == index + 1  ?
-                             (question.right_answer === index + 1 ? "rightAnswer" : "wrongAnswer")
-                              : "optionItem" }
-                        onClick={() => handleAnswerClick(index, question)}>
-                        {answer} 
-                    </li>
-                ))}
-            </ul>
+        <div className="quizOverviewContainer">
+            <div className="specificQuizContainer">
+                <h1 className="quiz_title"> {quizName ? formatQuizName(quizName) : quizName} </h1>
+                <textarea 
+                    className="questionArea" 
+                    value={question.question} 
+                    readOnly 
+                />
+                <ul className="optionsContainer">
+                    {question.answers.map((answer, index) => (
+                        <li key={index}
+                            className={question.chosen_answer == index + 1 || answerClicked == index + 1  ?
+                                (question.right_answer === index + 1 ? "rightAnswer" : "wrongAnswer")
+                                : "optionItem" }
+                            onClick={() => handleAnswerClick(index, question)}>
+                            {answer} 
+                        </li>
+                    ))}
+                </ul>
 
-            <div className="navigationButtons">
-                <button className={"prevOrNextButton"} onClick={() => handleNavigation(-1)} disabled={currentQuestionIndex <= 0}>Previous</button>
-                <button className={"prevOrNextButton"} onClick={() => handleNavigation(1)} disabled={currentQuestionIndex >= quizDataDic.length - 1}>Next</button>
+                <div className="navigationButtons">
+                    <button className={"prevOrNextButton"} onClick={() => handleNavigation(-1)} disabled={currentQuestionIndex <= 0}>Previous</button>
+                    <button className={"prevOrNextButton"} onClick={() => handleNavigation(1)} disabled={currentQuestionIndex >= quizDataDic.length - 1}>Next</button>
+                </div>
+
+                {typeOfUser === "staff" ?<button onClick={() => handleDeleteQuestion(question.id)} className="backbutton">Delete</button>: ""}
+                {shouldShowDeletedText === true &&
+                <p className="deletedText">
+                    Question has deleted successfully from the db!
+                </p>}
+
+
+                <button onClick={handleBackToLobby} className="backbutton">Back to Lobby</button>
+                
             </div>
-
-            {typeOfUser === "staff" ?<button onClick={() => handleDeleteQuestion(question.id)} className="backbutton">Delete</button>: ""}
-            {shouldShowDeletedText === true &&
-             <p className="deletedText">
-                Question has deleted successfully from the db!
-            </p>}
-
-
-            <button onClick={handleBackToLobby} className="backbutton">Back to Lobby</button>
-            
         </div>
     );
 };

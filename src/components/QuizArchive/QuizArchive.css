@@ -142,7 +142,25 @@
   color: green;
 }
 
-    
+.quiz_title {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  color: #4200bd;
+  margin: 20px 0;
+  text-transform: capitalize;
+}
 
-
-  
+.answerSummary {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 170px;
+  margin-left: 40px;
+  color: #4CAF50;
+  background-color: #e8f5e9;
+  padding: 10px 50px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}

@@ -129,7 +129,8 @@ const StaffBox: React.FC<StaffBoxProps> = ({file, fileId, onFileChange, onFileUp
       });
       const result = await response.json();
       onFileIdChange(result);
-      onFileNameChange(file.name)
+      const trimmedFileName = file.name.replace('.md', '');
+      onFileNameChange(trimmedFileName)
       console.log('File uploaded successfully:', result);
       setFileUploaded(true);
     } catch (error) {

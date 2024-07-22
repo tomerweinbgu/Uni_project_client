@@ -18,7 +18,7 @@ interface FileDetail {
 }
 
 // const SideBar: React.FC<SideBarProps> = ({file, fileSaved, typeOfUser}) => {
-const SideBar: React.FC<SideBarProps> = ({fileSaved, typeOfUser}) => {
+const  SideBar: React.FC<SideBarProps> = ({fileSaved, typeOfUser}) => {
     const [fileNames, setFileNames] = useState<string[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [filesDetails, setFilesDetails] = useState<FileDetail[]>([]);
@@ -63,9 +63,9 @@ const SideBar: React.FC<SideBarProps> = ({fileSaved, typeOfUser}) => {
 
     return (      
     <div className="sideBarContainer">
-      <h2 className="sideBarBasic">Sidebar</h2>
+      <h2 className="sideBarBasic">PPL</h2>
 
-      <h3 className="sideBarTitles">Files</h3>
+      <h3 className="sideBarTitles">Content Units</h3>
       {filesDetails.map(file => (
         <button 
           key={file.name} 
@@ -86,7 +86,7 @@ const SideBar: React.FC<SideBarProps> = ({fileSaved, typeOfUser}) => {
         </Modal>
       )}
 
-      <h3 className="sideBarTitles">Quizes</h3>
+      <h3 className="sideBarTitles">Quizzes</h3>
         {fileNames.map(fileName => (
         <Link
             key={fileName}
